@@ -1,0 +1,23 @@
+# Clean data and outputs are rebuilt by the master script, so they stay out of Git.
+/data/clean/*
+/outputs/*/*
+!.gitkeep
+
+# Uncomment if the raw data must not go to Git (large or private files).
+# /data/raw/*
+# !/data/raw/README.md
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+renv/library/
+
+# Python
+__pycache__/
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+~$*
