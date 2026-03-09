@@ -1,11 +1,10 @@
-# Clean data and outputs are rebuilt by the master script, so they stay out of Git.
-/data/clean/*
-/outputs/*/*
-!.gitkeep
+# Clean data and outputs are committed in this project,
+# so people without R or Stata still see every result.
 
-# Uncomment if the raw data must not go to Git (large or private files).
-# /data/raw/*
-# !/data/raw/README.md
+# Raw downloads are too large for Git (over 600 MB).
+# code/00_data_prep/prepare_data.py downloads them again.
+/data/raw/*
+!/data/raw/README.md
 
 # R
 .Rhistory
@@ -17,7 +16,9 @@ renv/library/
 __pycache__/
 .venv/
 
+# Office lock files
+~$*
+
 # OS
 .DS_Store
 Thumbs.db
-~$*

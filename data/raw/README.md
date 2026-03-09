@@ -1,8 +1,17 @@
 # Raw data
 
 - Raw data are the files as they come from the source. They are read-only: never edit them.
-- The two downloads are large (over 600 MB zipped), so they are not shipped with this project.
+- The two downloads are large (over 600 MB zipped), so they are not shipped with this project. Git ignores everything in this folder except this README.
+- `code/00_data_prep/prepare_data.py` downloads them here, then cuts them down to our 46 countries and 2000-2019. See [`../../code/00_data_prep/README.md`](../../code/00_data_prep/README.md).
+- You do not need to run it: the clean data in `../clean/` are already made.
 - Versions: FAOSTAT bulk release of 2025-12-18; CEPII Gravity V202211.
+
+## Files the script writes here
+
+- `fao_tm.zip`: the FAOSTAT download, about 420 MB.
+- `gravity.zip`: the CEPII download, about 207 MB.
+- `fao_tm_filtered.csv`: FAOSTAT cut down to our countries and years, about 2 MB.
+- `gravity_filtered.csv`: CEPII cut down to our countries and years, about 3 MB.
 
 ## FAOSTAT Detailed Trade Matrix (TM)
 
