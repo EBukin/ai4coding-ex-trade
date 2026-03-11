@@ -26,9 +26,13 @@
 ## CEPII Gravity database, version V202211
 
 - Publisher: CEPII, a French research centre on the world economy.
-- Used for: `dist_km`, `contig`, `comlang`, `rta`, `gdp_exporter` and `gdp_importer` in `farm_trade.csv`.
+- Used for: `dist_km`, `contig`, `comlang`, `rta`, `gdp_exporter` and `gdp_importer` in `farm_trade.csv`, and the country size used to simulate `farm_support.csv`.
 - Page: https://www.cepii.fr/CEPII/en/bdd_modele/bdd_modele_item.asp?id=8
 - Bulk file: https://www.cepii.fr/DATA_DOWNLOAD/gravity/data/Gravity_csv_V202211.zip (`Gravity_V202211.csv`, about 207 MB zipped).
 - Variables used: `dist`, `contig`, `comlang_off`, `fta_wto`, `gdp_o`, `gdp_d` (GDP in thousand current US dollars).
 - Licence: Etalab Open Licence 2.0 (Licence Ouverte 2.0).
 - Citation: Conte, M., P. Cotterlaz and T. Mayer (2022), "The CEPII Gravity database", CEPII Working Paper No. 2022-05, July 2022.
+
+## Synthetic data
+
+- `farm_support.csv` is simulated, not downloaded. See [`../clean/README.md`](../clean/README.md).

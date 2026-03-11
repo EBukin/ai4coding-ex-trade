@@ -17,6 +17,7 @@ Stages, one function each, in run order:
     filter_cepii      data/raw/gravity_filtered.csv
     build_countries   data/clean/countries.csv
     build_trade       data/clean/farm_trade.csv
+    simulate_support  data/clean/farm_support.csv (SYNTHETIC)
     write_readmes     data/clean/README.md, data/raw/README.md
 
 Needs pandas and numpy (numpy comes with pandas). The same input gives
@@ -250,6 +251,110 @@ def build_trade():
     return df, stats
 
 
+# ---- Stage: simulate farm_support.csv (SYNTHETIC) ------------------------
+# Reads:  the GDP columns of farm_trade.csv (built above).
+# Writes: data/clean/farm_support.csv.
+# Why:    there are no comparable subsidy data for all 46 countries. Data
+#         made from a known model let the Stata part check that its path
+#         model gets the true values back. The numbers are made up.
+SEED = 20260311
+B_FERT_ON_SUB = 0.60  # lnf <- lns
+B_OUT_ON_SUB = 0.10  # lny <- lns (direct effect)
+B_OUT_ON_FERT = 0.40  # lny <- lnf
+C_FERT = 9.5  # intercept of lnf
+C_OUT = 3.7  # intercept of lny, puts output on a realistic USD million scale
+C_SUB = 7.0  # intercept of lns
+B_SUB_ON_SIZE = 1.2  # lns <- standardised log mean GDP of the country
+B_SUB_TREND = 0.02  # lns trend per year
+SD_SUB, SD_FERT, SD_OUT = 0.30, 0.30, 0.08
+
+
+def simulate_support(trade):
+    """Model in logs, no fixed effects:
+
+    lns = C_SUB + B_SUB_ON_SIZE*size + B_SUB_TREND*(year-2010) + N(0, SD_SUB)
+    lnf = C_FERT + B_FERT_ON_SUB*lns + N(0, SD_FERT)
+    lny = C_OUT + B_OUT_ON_SUB*lns + B_OUT_ON_FERT*lnf + N(0, SD_OUT)
+
+    size is the standardised log of the country's mean GDP in current US
+    dollars (CEPII), so big economies get big subsidies.
+    """
+    gdp = trade.groupby("exporter")["gdp_exporter"].mean().reindex(ISO3)
+    lg = np.log(gdp.to_numpy(dtype="float64"))
+    size = (lg - lg.mean()) / lg.std()
+
+    rng = np.random.default_rng(SEED)
+    rows = [(iso, i, y) for i, iso in enumerate(ISO3) for y in YEARS]
+    n = len(rows)
+    idx = np.array([r[1] for r in rows])
+    yr = np.array([r[2] for r in rows], dtype="float64")
+    e_s = rng.normal(0, SD_SUB, n)
+    e_f = rng.normal(0, SD_FERT, n)
+    e_y = rng.normal(0, SD_OUT, n)
+    lns = C_SUB + B_SUB_ON_SIZE * size[idx] + B_SUB_TREND * (yr - 2010) + e_s
+    lnf = C_FERT + B_FERT_ON_SUB * lns + e_f
+    lny = C_OUT + B_OUT_ON_SUB * lns + B_OUT_ON_FERT * lnf + e_y
+
+    return pd.DataFrame({
+        "iso3": [r[0] for r in rows],
+        "year": [r[2] for r in rows],
+        "subsidy": [f"{v:.1f}" for v in np.exp(lns)],  # USD million
+        "fertiliser": np.round(np.exp(lnf)).astype("int64"),  # tonnes
+        "farm_output": [f"{v:.1f}" for v in np.exp(lny)],  # USD million
+    })
+
+
+def support_readme(n_support):
+    ind = B_FERT_ON_SUB * B_OUT_ON_FERT
+    return SUPPORT_README.format(
+        n_support=f"{n_support:,}", seed=SEED,
+        c_sub=C_SUB, b_size=B_SUB_ON_SIZE, b_trend=B_SUB_TREND, sd_sub=SD_SUB,
+        c_fert=C_FERT, b_fs=B_FERT_ON_SUB, sd_fert=SD_FERT,
+        c_out=C_OUT, b_ys=B_OUT_ON_SUB, b_yf=B_OUT_ON_FERT, sd_out=SD_OUT,
+        ind=ind, tot=B_OUT_ON_SUB + ind)
+
+
+SUPPORT_README = """## `farm_support.csv` (SYNTHETIC)
+
+**These numbers are made up.** A computer program made them. They are not real subsidies, fertiliser use or farm output for any country. The country codes and years are real, so the file joins to the others, but the values say nothing about those countries. Use them to practise methods, not to draw conclusions.
+
+One row per country and year: 46 countries, 2000-2019 ({n_support} rows).
+
+- `iso3`: the country.
+- `year`: calendar year, 2000-2019.
+- `subsidy`: million US dollars. Farm support paid to producers (synthetic).
+- `fertiliser`: tonnes. Fertiliser used on farms (synthetic).
+- `farm_output`: million US dollars. Value of farm output (synthetic).
+
+Values are levels, not logs. Take logs before you estimate elasticities. An elasticity is the percent change in one variable when another changes by 1 percent.
+
+### How the synthetic data were made
+
+- The script is `code/00_data_prep/prepare_data.py`, stage `simulate_support`.
+- The model is in natural logs: `lns` is ln subsidy, `lnf` is ln fertiliser, `lny` is ln farm output.
+- It has no fixed effects (a fixed effect is a separate constant for each country or each year).
+
+```
+lns = {c_sub} + {b_size} * size + {b_trend} * (year - 2010) + e1
+lnf = {c_fert} + {b_fs} * lns + e2
+lny = {c_out} + {b_ys} * lns + {b_yf} * lnf + e3
+```
+
+- `e1`, `e2`, `e3` are random draws from a normal distribution with mean 0 and standard deviations {sd_sub}, {sd_fert} and {sd_out}.
+- `size` is the standardised log of each country's mean GDP over 2000-2019 (CEPII), so larger economies get larger subsidies.
+- Random seed: {seed}. The same seed gives the same numbers on every run.
+
+True elasticities of farm output with respect to subsidy:
+
+- Direct, subsidy -> output: {b_ys:.2f}.
+- Indirect, subsidy -> fertiliser -> output: {b_fs:.2f} x {b_yf:.2f} = {ind:.2f}.
+- Total, direct + indirect: {tot:.2f}.
+
+A path model estimates linked equations together. Stata `sem (lny <- lns lnf) (lnf <- lns)` should get these values back, up to sampling noise (about +/- 0.03). Rounding the levels adds almost no error.
+
+"""
+
+
 # ---- Stage: write the data READMEs ---------------------------------------
 # Reads:  the counts from the stages above.
 # Writes: data/clean/README.md, data/raw/README.md.
@@ -305,6 +410,7 @@ SOURCES_README = """## Sources and licences
 
 - FAOSTAT Detailed Trade Matrix (TM), used for `trade_usd`. Licence: CC BY 4.0. Citation: FAO. 2025. FAOSTAT: Detailed trade matrix (TM). Rome, Food and Agriculture Organization of the United Nations. Bulk download, release of {fao_release}.
 - CEPII Gravity database V202211, used for distance, border, language, trade agreement and GDP. Licence: Etalab Open Licence 2.0. Citation: Conte, M., P. Cotterlaz and T. Mayer (2022), "The CEPII Gravity database", CEPII Working Paper No. 2022-05.
+- `farm_support.csv` is synthetic. It has no source.
 - Full detail, download links and versions: [`../raw/README.md`](../raw/README.md).
 """
 
@@ -336,18 +442,23 @@ RAW_README = """# Raw data
 ## CEPII Gravity database, version V202211
 
 - Publisher: CEPII, a French research centre on the world economy.
-- Used for: `dist_km`, `contig`, `comlang`, `rta`, `gdp_exporter` and `gdp_importer` in `farm_trade.csv`.
+- Used for: `dist_km`, `contig`, `comlang`, `rta`, `gdp_exporter` and `gdp_importer` in `farm_trade.csv`, and the country size used to simulate `farm_support.csv`.
 - Page: https://www.cepii.fr/CEPII/en/bdd_modele/bdd_modele_item.asp?id=8
 - Bulk file: {cepii_url} (`Gravity_V202211.csv`, about 207 MB zipped).
 - Variables used: `dist`, `contig`, `comlang_off`, `fta_wto`, `gdp_o`, `gdp_d` (GDP in thousand current US dollars).
 - Licence: Etalab Open Licence 2.0 (Licence Ouverte 2.0).
 - Citation: Conte, M., P. Cotterlaz and T. Mayer (2022), "The CEPII Gravity database", CEPII Working Paper No. 2022-05, July 2022.
+
+## Synthetic data
+
+- `farm_support.csv` is simulated, not downloaded. See [`../clean/README.md`](../clean/README.md).
 """
 
 
-def write_readmes(stats, n_trade):
+def write_readmes(stats, n_trade, n_support):
     counts = {k: f"{v:,}" for k, v in stats.items()}
     clean = CLEAN_README.format(n_trade=f"{n_trade:,}", **counts)
+    clean += support_readme(n_support)
     clean += SOURCES_README.format(fao_release=FAO_RELEASE)
     (CLEAN / "README.md").write_text(clean, encoding="utf-8", newline="\n")
     raw = RAW_README.format(fao_release=FAO_RELEASE, fao_url=FAO_URL,
@@ -382,10 +493,12 @@ def main():
     CLEAN.mkdir(parents=True, exist_ok=True)
     countries = build_countries()
     trade, stats = build_trade()
+    support = simulate_support(trade)
     print("Writing clean data:")
     write_csv(countries, "countries.csv")
     write_csv(trade, "farm_trade.csv")
-    write_readmes(stats, len(trade))
+    write_csv(support, "farm_support.csv")
+    write_readmes(stats, len(trade), len(support))
     print(f"  trade rows by source: {stats}")
 
 
