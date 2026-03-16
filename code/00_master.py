@@ -8,6 +8,7 @@ import runpy
 # The Python scripts, in the order they run.
 scripts = [
     "code/01_bloc_trade.py",    # bloc-to-bloc trade by year
+    "code/02_bloc_trend.py",    # chart: trade between blocs over time
 ]
 
 for script in scripts:
