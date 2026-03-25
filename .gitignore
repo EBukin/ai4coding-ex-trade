@@ -16,6 +16,10 @@ renv/library/
 __pycache__/
 .venv/
 
+# Stata
+*.log
+*.smcl
+
 # Office lock files
 ~$*
 
