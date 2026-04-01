@@ -8,4 +8,6 @@ version 17
 clear all
 set more off
 
+* The scripts share the data in memory, so run them in this order
 do "code/01_prepare.do"    // load farm support data, take logs
+do "code/02_sem.do"        // path model and effects
