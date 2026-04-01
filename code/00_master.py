@@ -9,6 +9,7 @@ import runpy
 scripts = [
     "code/01_bloc_trade.py",    # bloc-to-bloc trade by year
     "code/02_bloc_trend.py",    # chart: trade between blocs over time
+    "code/03_bloc_heatmap.py",  # chart: who trades with whom in 2019
 ]
 
 for script in scripts:
