@@ -41,6 +41,7 @@ How `trade_usd` is built:
 - Where neither reports, the flow is set to 0.
 - In this file: 34,082 rows reported by the importer, 2,822 mirror rows, 4,496 rows with no report.
 - 5,008 rows have `trade_usd = 0`: the 4,496 with no report, plus 512 where the reported value itself is 0.
+- FAOSTAT values are in thousand US dollars. The script multiplies them by 1,000, so `trade_usd` is in US dollars.
 
 ## `farm_support.csv` (SYNTHETIC)
 
