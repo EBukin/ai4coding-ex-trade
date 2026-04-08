@@ -5,6 +5,7 @@ This stage turns the raw downloads into the clean data in `data/clean/`. One scr
 ## What it does and why it is separate
 
 - It downloads two public datasets, cuts them down to our 46 countries and 2000-2019, and joins them into clean tables.
+- It also makes the synthetic subsidy data for the Stata part.
 - It is separate from the analyses because it needs 600 MB of downloads. The analyses only read the small clean files.
 - The clean data are already made and committed. **You do not need to run this script** to run the project.
 - The master scripts of the analyses never call it.
@@ -18,7 +19,8 @@ Each step is one function in `prepare_data.py`. The comment above each function 
 3. `filter_cepii`: does the same for CEPII and writes `data/raw/gravity_filtered.csv`.
 4. `build_countries`: writes `data/clean/countries.csv`, the list of countries and blocs.
 5. `build_trade`: joins trade values and gravity variables and writes `data/clean/farm_trade.csv`.
-6. `write_readmes`: writes `data/clean/README.md` and `data/raw/README.md`, with counts that match the files.
+6. `simulate_support`: makes the synthetic `data/clean/farm_support.csv`.
+7. `write_readmes`: writes `data/clean/README.md` and `data/raw/README.md`, with counts that match the files.
 
 ## Sources
 
@@ -28,7 +30,18 @@ Each step is one function in `prepare_data.py`. The comment above each function 
 
 ## Units
 
-- CEPII reports GDP in thousand US dollars. `build_trade` multiplies GDP by 1,000.
+- FAOSTAT reports trade values in thousand US dollars.
+- `build_trade` multiplies them by 1,000, so `trade_usd` in `farm_trade.csv` is in US dollars.
+- CEPII reports GDP in thousand US dollars too. `build_trade` also multiplies GDP by 1,000.
+
+## The synthetic subsidy data
+
+- There are no comparable subsidy data for all 46 countries, so `simulate_support` makes them up from a known model.
+- Three equations in logs: subsidy depends on country size and a time trend; fertiliser depends on subsidy; farm output depends on subsidy and fertiliser.
+- Country size comes from each country's mean GDP in CEPII, so larger economies get larger subsidies.
+- The true elasticities of output with respect to subsidy are: direct 0.10, indirect through fertiliser 0.24, total 0.34. An elasticity is the percent change in output when subsidy rises by 1 percent.
+- The random seed is fixed (20260311), so every run gives the same numbers.
+- The full model, with all its values, is in [`data/clean/README.md`](../../data/clean/README.md).
 
 ## How to run
 

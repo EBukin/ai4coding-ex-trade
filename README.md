@@ -1,73 +1,86 @@
-# Project name
+# Farm trade and farm support
 
-## To do
-
-- [ ] Write the purpose and the why in two sentences.
-- [ ] Record where the raw data comes from: source, date, link.
-- [ ] Set up the environment for your language.
-- [ ] Make the first commit, with a message that says why.
-
-Delete this section when every item is done.
+An example project for the "AI for coding" course. You use it to learn how to explore and maintain a data project in three languages with an AI assistant.
+It studies farm trade and farm support in 46 countries, grouped in 6 trade blocs, from 2000 to 2019.
 
 ## Purpose and why
 
-What this project produces, and why it is needed. Two sentences.
+- **Learning first.** The project is small but real: three languages, shared data, a Git history with branches, merges and fixes. It is a safe place to practise reading, running and changing code with AI.
+- **Research questions,** one per language:
+  - Python: who trades farm goods with whom?
+  - R: how do distance, borders, language and trade agreements relate to farm trade?
+  - Stata: how much of a farm subsidy reaches farm output, directly and through more fertiliser?
+
+## Getting started
+
+- Open this folder in Positron or VS Code.
+- Run everything from the project root, the folder that holds this README.
+- Each part gets a master script in `code/`: `00_master.py`, `00_master.R` and `00_master.do`.
+- Each analyst adds the run instructions for their part when their branch merges.
+
+## What's inside
+
+Three languages answer three questions on one shared set of data:
+
+- **Python, bloc charts:** adds up trade between blocs and draws a trend chart and a 2019 heatmap.
+- **R, gravity model of trade:** a gravity model explains trade between two countries by their size and the distance between them. It is estimated by PPML, a regression method that keeps the zero trade flows. The results are associations, not causal effects.
+- **Stata, subsidy pass-through:** a path model with Stata's `sem` command splits the effect of subsidy on output into a direct part and a part through fertiliser. A path model estimates linked equations together. **The data are synthetic.**
+
+Each part will write a tidy file to `outputs/data/`. Their columns will stay fixed, so they could feed one dashboard later.
+
+## Data provenance
+
+How the data move, step by step:
+
+1. Download: FAOSTAT and CEPII publish the raw files.
+2. `data/raw/`: the downloads are saved here. They are too large for Git, so only their description is kept.
+3. `code/00_data_prep/`: one script filters, joins and cleans them, and makes the synthetic subsidy data.
+4. `data/clean/`: the clean files, committed and ready to use.
+5. `code/`: the analysis scripts read the clean files.
+6. `outputs/`: figures, tables and tidy data, made by code only.
+
+Sources and licences:
+
+- Trade values: FAOSTAT Detailed Trade Matrix, FAO, bulk release of 2025-12-18. Licence: CC BY 4.0.
+- Distance, border, language, trade agreements and GDP (the value of everything a country produces in a year): CEPII Gravity database, version V202211. Licence: Etalab Open Licence 2.0.
+- Farm support: none. The data are made up.
+
+**`farm_support.csv` is synthetic.** A computer program made the numbers from a known model. They are not real subsidies, fertiliser use or farm output for any country. An elasticity is the percent change in output when subsidy rises by 1 percent. The true elasticities are: direct 0.10, indirect through fertiliser 0.24, total 0.34. Use them to check the Stata results. Do not draw conclusions about real countries.
+
+## Folder structure
+
+- `data/raw/`: notes on the raw sources. Read-only. The raw files themselves are not in Git.
+- `data/clean/`: clean data with a variable list. Made by code only; do not edit by hand.
+- `code/`: numbered scripts and one master script per language. Data prep has its own folder, `code/00_data_prep/`. See `code/README.md`.
+- `outputs/figures/`: charts. Made by code only.
+- `outputs/tables/`: tables (text, CSV, Excel). Made by code only.
+- `outputs/data/`: tidy data behind the results. Made by code only. Keep the columns fixed.
+- `reports/`: notes and write-ups about the results. Flexible.
+
+## Documentation
+
+- [`code/README.md`](code/README.md): how to run all the code, stage by stage.
+- [`code/00_data_prep/README.md`](code/00_data_prep/README.md): how the clean data are made.
+- [`data/clean/README.md`](data/clean/README.md): every variable, its unit and its meaning.
+- [`data/raw/README.md`](data/raw/README.md): sources, links, versions, licences and citations.
+- [`AGENTS.md`](AGENTS.md): rules for AI assistants in this project.
 
 ## Who
 
-| Role | Name | Contact |
-|---|---|---|
-| Lead | | |
-| Contributors | | |
+- Team lead: README, data, merges.
+- R analyst: gravity model.
+- Stata analyst: subsidy pass-through.
+- Python analyst: bloc charts.
 
-One-off or long-term: state which, and who maintains the project.
+The Git history records who changed what, when and why: ask your AI assistant to summarise it.
 
-## How to run
+## News
 
-1. Open this folder in Positron or VS Code.
-2. Run the master script for your language in `code/`: `00_master.do`, `00_master.R` or `00_master.py`.
-3. The master script rebuilds `data/clean/` and `outputs/` from `data/raw/`.
+Newest first. One entry per meaningful change or decision.
 
-Delete `data/clean/` and `outputs/` contents, run the master script again, and you get the same results.
+- 2026-04-06, Amina: Trade values converted from thousand USD to USD. Why: totals were 1,000 times too small.
+- 2026-03-12, Amina: Work split by language: Python for the bloc charts, R for the gravity model, Stata for the subsidy path model. Why: each analyst works in the tool they know best, on their own branch.
+- 2026-03-11, Amina: Added synthetic farm support data. Why: there are no comparable subsidy data for all 46 countries, and known true values let the Stata part test its model.
+- 2026-03-09, Amina: Added the clean trade data and the script that makes them, `code/00_data_prep/prepare_data.py`. Clean data and outputs are now committed. Why: everyone works from the same data, and people without R or Stata still see every result.
+- 2026-03-02, Amina: Started the project from the team template.
 
-**Environment.** Stata: the master do-file installs the packages it needs. R: use `renv`. Python: use a project environment.
-
-## Folder map
-
-| Folder | Holds | Rule |
-|---|---|---|
-| `data/raw/` | Data as downloaded or received | Read-only. Never edit or overwrite. |
-| `data/clean/` | Data after cleaning, ready for analysis | Made by code only |
-| `code/` | Numbered scripts and one master script | The master script runs them all, in order |
-| `outputs/figures/` | Charts | Made by code only |
-| `outputs/tables/` | Tables | Made by code only |
-| `outputs/data/` | Data behind figures, tables and indicators | Made by code only |
-| `reports/` | Write-ups, notes, slides | Flexible |
-
-The data moves in three stages, like an ETL pipeline: extract (`data/raw/`), transform (`data/clean/`), load (`outputs/`).
-
-## Data sources
-
-| File | Source | Date downloaded | Link | Licence |
-|---|---|---|---|---|
-| | | | | |
-
-If the raw data lives outside this folder, for example on SharePoint, write the full path here and treat it as read-only.
-
-## Log
-
-Record who did what, when and why. Newest first.
-
-| Date | Who | What | Why |
-|---|---|---|---|
-| | | Project created from the ai4coding template | |
-
-## Licence and publishing (optional)
-
-Fill this in before you share the project outside your team.
-
-- **Code.** World Bank repositories use the MIT License plus the World Bank IGO Rider: <https://github.com/worldbank>.
-- **Data.** World Bank datasets default to CC BY 4.0. Third-party data keeps its own licence: check it before you publish.
-- **Reports.** World Bank publications carry the standard disclaimer: "The findings, interpretations, and conclusions expressed in this work do not necessarily reflect the views of The World Bank, its Board of Executive Directors, or the governments they represent."
-- **Before you make code public,** contact the Open Source Program Office (OSPO), <github@worldbank.org>. Releases are cleared by the Legal Vice Presidency (LEG) and OSPO.
-- **OSPO guidance:** <https://worldbank.github.io/ospo>. It opens only if your GitHub account is a member of the World Bank GitHub organization.
