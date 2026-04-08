@@ -20,6 +20,9 @@ dir.create("outputs/data", recursive = TRUE, showWarnings = FALSE)
 # One row per exporter, importer and year. trade_usd is 0 where no trade.
 trade <- read.csv("data/clean/farm_trade.csv")
 
+# Country-pair identifier (direction matters: USA->CAN differs from CAN->USA)
+trade$pair <- paste(trade$exporter, trade$importer, sep = "_")
+
 # ---- Estimate --------------------------------------------------------------
 # Regressors: distance (in logs), shared border, common language and
 # regional trade agreement.
@@ -28,10 +31,13 @@ trade <- read.csv("data/clean/farm_trade.csv")
 # That is why GDP does not enter the formula.
 # The coefficients are associations, not causal effects: countries choose
 # their trade agreements, so rta also picks up other ties between them.
+# Errors are clustered by country pair: flows of one pair are correlated
+# over time, and default (IID) standard errors are far too small here.
 model <- fepois(
   trade_usd ~ log(dist_km) + contig + comlang + rta |
     exporter^year + importer^year,
-  data = trade
+  data = trade,
+  cluster = ~ pair
 )
 
 print(summary(model))
