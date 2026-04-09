@@ -29,6 +29,14 @@ ax.set_yticks(range(len(table.index)), labels=table.index)
 ax.set_xlabel("Importing bloc")
 ax.set_ylabel("Exporting bloc")
 
+# Write the value in each cell. Use white text on dark cells.
+threshold = table.values.max() / 2
+for i in range(len(table.index)):
+    for j in range(len(table.columns)):
+        value = table.values[i, j]
+        colour = "white" if value > threshold else "black"
+        ax.text(j, i, f"{value:.1f}", ha="center", va="center", color=colour, fontsize=9)
+
 fig.colorbar(image, ax=ax, label="Farm trade (USD billions)")
 ax.set_title(f"Farm trade between blocs, {year} (USD billions)")
 
