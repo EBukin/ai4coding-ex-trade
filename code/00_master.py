@@ -4,6 +4,7 @@
 # It runs the numbered Python scripts below, in order.
 
 import runpy
+from pathlib import Path
 
 # The Python scripts, in the order they run.
 scripts = [
@@ -11,6 +12,10 @@ scripts = [
     "code/02_bloc_trend.py",    # chart: trade between blocs over time
     "code/03_bloc_heatmap.py",  # chart: who trades with whom in 2019
 ]
+
+# Make sure the output folders exist.
+for folder in ["outputs/data", "outputs/tables", "outputs/figures"]:
+    Path(folder).mkdir(parents=True, exist_ok=True)
 
 for script in scripts:
     print("Running", script)
