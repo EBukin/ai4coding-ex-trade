@@ -227,6 +227,8 @@ def build_trade():
     src = np.where(df["imp"].notna(), "import",
                    np.where(df["exp"].notna(), "mirror", "none"))
     value = df["imp"].fillna(df["exp"]).fillna(0.0)
+    # FAOSTAT values are in thousand USD: multiply by 1,000 to get USD.
+    value = value * 1000
     df["trade_usd"] = np.round(value).astype("int64")
     stats = pd.Series(src).value_counts().to_dict()
     stats = {
@@ -403,6 +405,7 @@ How `trade_usd` is built:
 - Where neither reports, the flow is set to 0.
 - In this file: {n_import} rows reported by the importer, {n_mirror} mirror rows, {n_none} rows with no report.
 - {n_zero} rows have `trade_usd = 0`: the {n_none} with no report, plus {n_rzero} where the reported value itself is 0.
+- FAOSTAT values are in thousand US dollars. The script multiplies them by 1,000, so `trade_usd` is in US dollars.
 
 """
 

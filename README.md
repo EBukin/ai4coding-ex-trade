@@ -78,6 +78,7 @@ The Git history records who changed what, when and why: ask your AI assistant to
 
 Newest first. One entry per meaningful change or decision.
 
+- 2026-04-06, Amina: Trade values converted from thousand USD to USD. Why: totals were 1,000 times too small.
 - 2026-03-12, Amina: Work split by language: Python for the bloc charts, R for the gravity model, Stata for the subsidy path model. Why: each analyst works in the tool they know best, on their own branch.
 - 2026-03-11, Amina: Added synthetic farm support data. Why: there are no comparable subsidy data for all 46 countries, and known true values let the Stata part test its model.
 - 2026-03-09, Amina: Added the clean trade data and the script that makes them, `code/00_data_prep/prepare_data.py`. Clean data and outputs are now committed. Why: everyone works from the same data, and people without R or Stata still see every result.

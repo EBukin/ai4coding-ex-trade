@@ -30,7 +30,9 @@ Each step is one function in `prepare_data.py`. The comment above each function 
 
 ## Units
 
-- CEPII reports GDP in thousand US dollars. `build_trade` multiplies GDP by 1,000.
+- FAOSTAT reports trade values in thousand US dollars.
+- `build_trade` multiplies them by 1,000, so `trade_usd` in `farm_trade.csv` is in US dollars.
+- CEPII reports GDP in thousand US dollars too. `build_trade` also multiplies GDP by 1,000.
 
 ## The synthetic subsidy data
 
