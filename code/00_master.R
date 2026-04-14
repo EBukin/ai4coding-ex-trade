@@ -7,7 +7,8 @@
 # Package needed: fixest. Install once with install.packages("fixest").
 
 scripts <- c(
-  "code/01_gravity.R"     # PPML gravity model
+  "code/01_gravity.R",    # PPML gravity model -> tables and tidy coefficients
+  "code/02_coef_plot.R"   # coefficient plot with 95% confidence intervals
 )
 
 for (s in scripts) {
@@ -16,4 +17,4 @@ for (s in scripts) {
   source(s, local = new.env())
 }
 
-message("Done.")
+message("Done. Results are in outputs/.")
