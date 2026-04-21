@@ -13,10 +13,16 @@ It studies farm trade and farm support in 46 countries, grouped in 6 trade blocs
 
 ## Getting started
 
+What you need:
+
+- R with `fixest` (optional): `install.packages("fixest")`
+
+How to run:
+
 - Open this folder in Positron or VS Code.
 - Run everything from the project root, the folder that holds this README.
-- Each part gets a master script in `code/`: `00_master.py`, `00_master.R` and `00_master.do`.
-- Each analyst adds the run instructions for their part when their branch merges.
+- R: `Rscript code/00_master.R`
+- Each master script runs its numbered scripts in order and writes to `outputs/`.
 
 ## What's inside
 
@@ -26,7 +32,9 @@ Three languages answer three questions on one shared set of data:
 - **R, gravity model of trade:** a gravity model explains trade between two countries by their size and the distance between them. It is estimated by PPML, a regression method that keeps the zero trade flows. The results are associations, not causal effects.
 - **Stata, subsidy pass-through:** a path model with Stata's `sem` command splits the effect of subsidy on output into a direct part and a part through fertiliser. A path model estimates linked equations together. **The data are synthetic.**
 
-Each part will write a tidy file to `outputs/data/`. Their columns will stay fixed, so they could feed one dashboard later.
+Each part writes a tidy file to `outputs/data/`. Their columns stay fixed, so they could feed one dashboard later:
+
+- `gravity_coefs.csv`: `term`, `estimate`, `std_error`, `p_value`
 
 ## Data provenance
 
@@ -78,6 +86,7 @@ The Git history records who changed what, when and why: ask your AI assistant to
 
 Newest first. One entry per meaningful change or decision.
 
+- 2026-04-20, Tomas: R part merged: the PPML gravity model of farm trade, with its table and coefficient plot.
 - 2026-04-06, Amina: Trade values converted from thousand USD to USD. Why: totals were 1,000 times too small.
 - 2026-03-12, Amina: Work split by language: Python for the bloc charts, R for the gravity model, Stata for the subsidy path model. Why: each analyst works in the tool they know best, on their own branch.
 - 2026-03-11, Amina: Added synthetic farm support data. Why: there are no comparable subsidy data for all 46 countries, and known true values let the Stata part test its model.
