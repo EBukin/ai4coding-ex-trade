@@ -1,4 +1,4 @@
-* 02_sem.do: path model of how subsidy reaches farm output.
+* 03_sem.do: path model of how subsidy reaches farm output.
 * Needs the data from 01_prepare.do. Run through code/00_master.do.
 *
 * Two equations, estimated together:
