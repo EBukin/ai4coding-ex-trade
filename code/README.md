@@ -10,6 +10,7 @@ How to run all the code, stage by stage.
 ## Stages, in run order
 
 - `00_data_prep/`: data preparation. Optional: the clean data are already made.
+- Python: who trades with whom.
 - R: gravity model of farm trade.
 - Each analysis stage reads `data/clean/` and writes to `outputs/`.
 
@@ -19,6 +20,15 @@ Run: `python code/00_data_prep/prepare_data.py`
 
 - `prepare_data.py`: downloads the raw data, cleans it and makes the synthetic subsidy data. See [`00_data_prep/README.md`](00_data_prep/README.md).
 - You do not need to run it: the clean data are already in `data/clean/`.
+
+## Python: who trades with whom
+
+Run: `python code/00_master.py`
+
+- `00_master.py`: runs the scripts below, in order.
+- `01_bloc_trade.py`: adds up farm trade by year and bloc pair.
+- `02_bloc_trend.py`: chart of trade between blocs over time.
+- `03_bloc_heatmap.py`: heatmap of trade between blocs in 2019.
 
 ## R: gravity model of farm trade
 

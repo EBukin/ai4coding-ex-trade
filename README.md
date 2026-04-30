@@ -3,6 +3,8 @@
 An example project for the "AI for coding" course. You use it to learn how to explore and maintain a data project in three languages with an AI assistant.
 It studies farm trade and farm support in 46 countries, grouped in 6 trade blocs, from 2000 to 2019.
 
+![Farm trade between blocs in 2019, in USD billions](outputs/figures/bloc_heatmap_2019.png)
+
 ## Purpose and why
 
 - **Learning first.** The project is small but real: three languages, shared data, a Git history with branches, merges and fixes. It is a safe place to practise reading, running and changing code with AI.
@@ -15,14 +17,17 @@ It studies farm trade and farm support in 46 countries, grouped in 6 trade blocs
 
 What you need:
 
+- Python with `pandas` and `matplotlib`: `pip install pandas matplotlib`
 - R with `fixest` (optional): `install.packages("fixest")`
 
 How to run:
 
 - Open this folder in Positron or VS Code.
 - Run everything from the project root, the folder that holds this README.
+- Python: `python code/00_master.py`
 - R: `Rscript code/00_master.R`
 - Each master script runs its numbered scripts in order and writes to `outputs/`.
+- The parts are independent: run one or both.
 
 ## What's inside
 
@@ -34,6 +39,7 @@ Three languages answer three questions on one shared set of data:
 
 Each part writes a tidy file to `outputs/data/`. Their columns stay fixed, so they could feed one dashboard later:
 
+- `bloc_trade.csv`: `year`, `bloc_from`, `bloc_to`, `trade_usd`
 - `gravity_coefs.csv`: `term`, `estimate`, `std_error`, `p_value`
 
 ## Data provenance
@@ -86,6 +92,7 @@ The Git history records who changed what, when and why: ask your AI assistant to
 
 Newest first. One entry per meaningful change or decision.
 
+- 2026-04-29, Mei: Python part merged: bloc trade totals, a trend chart and a 2019 heatmap.
 - 2026-04-20, Tomas: R part merged: the PPML gravity model of farm trade, with its table and coefficient plot.
 - 2026-04-06, Amina: Trade values converted from thousand USD to USD. Why: totals were 1,000 times too small.
 - 2026-03-12, Amina: Work split by language: Python for the bloc charts, R for the gravity model, Stata for the subsidy path model. Why: each analyst works in the tool they know best, on their own branch.
