@@ -4,6 +4,13 @@
 * The slope of the fitted line is the total elasticity of output with
 * respect to subsidy. 03_sem.do splits it into direct and indirect parts.
 
+* Stop with a clear message if the prepared data are not in memory
+capture confirm variable ln_output ln_subsidy
+if _rc {
+    display as error "Run code/01_prepare.do first (or code/00_master.do)."
+    exit 111
+}
+
 twoway (scatter ln_output ln_subsidy, msize(small) mcolor(navy%40)) ///
        (lfit ln_output ln_subsidy, lcolor(cranberry) lwidth(medthick)), ///
     title("Farm output and farm subsidy, in logs") ///

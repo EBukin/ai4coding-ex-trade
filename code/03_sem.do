@@ -6,6 +6,13 @@
 *   ln_output <- ln_subsidy ln_fert   subsidy and fertiliser change output
 * All variables are in logs, so coefficients are elasticities.
 
+* Stop with a clear message if the prepared data are not in memory
+capture confirm variable ln_output ln_subsidy ln_fert
+if _rc {
+    display as error "Run code/01_prepare.do first (or code/00_master.do)."
+    exit 111
+}
+
 sem (ln_output <- ln_subsidy ln_fert) (ln_fert <- ln_subsidy), nolog
 
 * Direct, indirect (through fertiliser) and total effects
