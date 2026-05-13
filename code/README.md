@@ -12,7 +12,8 @@ How to run all the code, stage by stage.
 - `00_data_prep/`: data preparation. Optional: the clean data are already made.
 - Python: who trades with whom.
 - R: gravity model of farm trade.
-- Each analysis stage reads `data/clean/` and writes to `outputs/`.
+- Stata: subsidy pass-through.
+- The analysis stages are independent: run one, two or all three, in any order. Each reads `data/clean/` and writes to `outputs/`.
 
 ## `00_data_prep/`: data preparation (optional)
 
@@ -37,3 +38,12 @@ Run: `Rscript code/00_master.R`
 - `00_master.R`: runs the scripts below, in order.
 - `01_gravity.R`: PPML gravity model. PPML is a regression method that keeps the zero trade flows. Fixed effects for each exporter-year and importer-year (a separate constant for each) absorb GDP and prices.
 - `02_coef_plot.R`: coefficient plot with 95% confidence intervals.
+
+## Stata: subsidy pass-through
+
+Run: in Stata, `cd` to the project root, then `do code/00_master.do`
+
+- `00_master.do`: runs the do-files below, in order.
+- `01_prepare.do`: loads the farm support data and takes logs.
+- `02_figure.do`: scatter of log output against log subsidy.
+- `03_sem.do`: path model with `sem` (linked equations estimated together), effects with `estat teffects`, Excel and CSV tables.

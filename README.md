@@ -19,6 +19,7 @@ What you need:
 
 - Python with `pandas` and `matplotlib`: `pip install pandas matplotlib`
 - R with `fixest` (optional): `install.packages("fixest")`
+- Stata 17 or later (optional)
 
 How to run:
 
@@ -26,8 +27,11 @@ How to run:
 - Run everything from the project root, the folder that holds this README.
 - Python: `python code/00_master.py`
 - R: `Rscript code/00_master.R`
+- Stata: in Stata, `cd` to the project root, then `do code/00_master.do`
 - Each master script runs its numbered scripts in order and writes to `outputs/`.
-- The parts are independent: run one or both.
+- The parts are independent: run one, two or all three.
+
+All outputs are committed. If you do not have R or Stata, you can still see their results in `outputs/`.
 
 ## What's inside
 
@@ -41,6 +45,7 @@ Each part writes a tidy file to `outputs/data/`. Their columns stay fixed, so th
 
 - `bloc_trade.csv`: `year`, `bloc_from`, `bloc_to`, `trade_usd`
 - `gravity_coefs.csv`: `term`, `estimate`, `std_error`, `p_value`
+- `sem_effects.csv`: `effect`, `path`, `estimate`, `std_error`
 
 ## Data provenance
 
@@ -92,6 +97,7 @@ The Git history records who changed what, when and why: ask your AI assistant to
 
 Newest first. One entry per meaningful change or decision.
 
+- 2026-05-12, Grace: Stata part merged: the path model gets the true synthetic values back (direct 0.103, indirect 0.228, total 0.331).
 - 2026-04-29, Mei: Python part merged: bloc trade totals, a trend chart and a 2019 heatmap.
 - 2026-04-20, Tomas: R part merged: the PPML gravity model of farm trade, with its table and coefficient plot.
 - 2026-04-06, Amina: Trade values converted from thousand USD to USD. Why: totals were 1,000 times too small.
