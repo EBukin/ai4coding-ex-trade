@@ -2,6 +2,11 @@
 
 These rules apply to any AI assistant in this project: Claude Code, GitHub Copilot, Posit Assistant or others. `CLAUDE.md` only imports this file, so keep the rules here.
 
+## Read first
+
+- Read `README.md`: what the project is, its data warnings and its News.
+- Read the README of the folder you work in, for example `code/README.md` or `data/clean/README.md`.
+
 ## How to talk
 
 - Use short, clear, simple words. Stay informative.
@@ -14,6 +19,14 @@ These rules apply to any AI assistant in this project: Claude Code, GitHub Copil
 - Propose small changes. Show the changed lines before you apply them.
 - Ask before you install software, delete files or change the folder structure.
 - When you explain a result, name the file that holds it.
+
+## Data provenance
+
+Help the user keep it clear where every number comes from.
+
+- Raw data are read-only. Clean data and outputs are made by code only.
+- For any new data, ask where it comes from: source, date, link, licence. Record it in `data/raw/README.md`.
+- Point out results that cannot be traced back to code and data.
 
 ## Documenting changes (News)
 
@@ -38,3 +51,15 @@ Where this project departs from the template, and why. Add a bullet only when th
 
 - 2026-03-09: clean data and outputs are committed to Git. Why: not everyone has R or Stata, and they still need to see every result.
 - 2026-03-09: data prep is a separate stage in `code/00_data_prep/`, and the master scripts do not run it. Why: it needs 600 MB of downloads; the analyses only need the clean files.
+
+## Code and packages
+
+- Use only these packages: Python `pandas` and `matplotlib`; R `fixest` and base R; Stata built-in commands. Ask before you add any other.
+- Add each new script to the master script of its language.
+- Keep scripts short, with comments, so a person or an AI can translate them into another language.
+- Do not change the columns of files in `outputs/data/`. For a new result, write a new file.
+
+## Git
+
+- Suggest a commit after each meaningful step.
+- Commit messages say why the change was made, not only what changed.
