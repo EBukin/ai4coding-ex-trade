@@ -97,6 +97,7 @@ The Git history records who changed what, when and why: ask your AI assistant to
 
 Newest first. One entry per meaningful change or decision.
 
+- 2026-06-16, Grace: The Stata master now stops with a clear message when it is not run from the project root. Why: the old error, "file not found" deep inside a do-file, did not say what to do.
 - 2026-06-03, Amina: Wrote the rules for AI assistants in `AGENTS.md`. Why: new team members use assistants to find their way, and the assistant should explain before it changes anything.
 - 2026-05-12, Grace: Stata part merged: the path model gets the true synthetic values back (direct 0.103, indirect 0.228, total 0.331).
 - 2026-04-29, Mei: Python part merged: bloc trade totals, a trend chart and a 2019 heatmap.
