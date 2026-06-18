@@ -9,6 +9,13 @@ version 17
 clear all
 set more off
 
+* Stop early with a clear message if we are not in the project root
+capture confirm file "data/clean/farm_support.csv"
+if _rc {
+    display as error "Run this file from the project root folder."
+    exit 601
+}
+
 * Make sure the output folders exist (no error if they already do)
 capture mkdir "outputs"
 capture mkdir "outputs/data"
