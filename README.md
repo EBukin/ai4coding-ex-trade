@@ -25,9 +25,9 @@ How to run:
 
 - Open this folder in Positron or VS Code.
 - Run everything from the project root, the folder that holds this README.
-- Python: `python code/00_master.py`
-- R: `Rscript code/00_master.R`
-- Stata: in Stata, `cd` to the project root, then `do code/00_master.do`
+- Python: `python code/python/00_master.py`
+- R: `Rscript code/r/00_master.R`
+- Stata: in Stata, `cd` to the project root, then `do code/stata/00_master.do`
 - Each master script runs its numbered scripts in order and writes to `outputs/`.
 - The parts are independent: run one, two or all three.
 
@@ -55,7 +55,7 @@ How the data move, step by step:
 2. `data/raw/`: the downloads are saved here. They are too large for Git, so only their description is kept.
 3. `code/00_data_prep/`: one script filters, joins and cleans them, and makes the synthetic subsidy data.
 4. `data/clean/`: the clean files, committed and ready to use.
-5. `code/`: the analysis scripts read the clean files.
+5. `code/python/`, `code/r/`, `code/stata/`: the analyses read the clean files.
 6. `outputs/`: figures, tables and tidy data, made by code only.
 
 Sources and licences:
@@ -70,7 +70,7 @@ Sources and licences:
 
 - `data/raw/`: notes on the raw sources. Read-only. The raw files themselves are not in Git.
 - `data/clean/`: clean data with a variable list. Made by code only; do not edit by hand.
-- `code/`: numbered scripts and one master script per language. Data prep has its own folder, `code/00_data_prep/`. See `code/README.md`.
+- `code/`: one folder per stage, with numbered scripts and one master script per language. See `code/README.md`.
 - `outputs/figures/`: charts. Made by code only.
 - `outputs/tables/`: tables (text, CSV, Excel). Made by code only.
 - `outputs/data/`: tidy data behind the results. Made by code only. Keep the columns fixed.
@@ -97,6 +97,7 @@ The Git history records who changed what, when and why: ask your AI assistant to
 
 Newest first. One entry per meaningful change or decision.
 
+- 2026-06-24, Amina: Grouped the code by language in `code/python/`, `code/r/` and `code/stata/`. Why: with data prep in its own folder and three languages, one flat `code/` folder was hard to scan.
 - 2026-06-16, Grace: The Stata master now stops with a clear message when it is not run from the project root. Why: the old error, "file not found" deep inside a do-file, did not say what to do.
 - 2026-06-03, Amina: Wrote the rules for AI assistants in `AGENTS.md`. Why: new team members use assistants to find their way, and the assistant should explain before it changes anything.
 - 2026-05-12, Grace: Stata part merged: the path model gets the true synthetic values back (direct 0.103, indirect 0.228, total 0.331).

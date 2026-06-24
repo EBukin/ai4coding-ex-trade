@@ -1,5 +1,5 @@
 * 01_prepare.do: load the farm support data and take logs.
-* Run through code/00_master.do from the project root.
+* Run through code/stata/00_master.do from the project root.
 *
 * NOTE: farm_support.csv is SYNTHETIC (made up). See data/clean/README.md.
 
