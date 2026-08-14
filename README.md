@@ -86,12 +86,12 @@ Sources and licences:
 
 ## Who
 
-- Team lead: README, data, merges.
-- R analyst: gravity model.
-- Stata analyst: subsidy pass-through.
-- Python analyst: bloc charts.
+- Amina Haddad, team lead: README, data, merges.
+- Tomas Ferreira, R analyst: gravity model.
+- Grace Owusu, Stata analyst: subsidy pass-through.
+- Mei Lin Tan, Python analyst: bloc charts.
 
-The Git history records who changed what, when and why: ask your AI assistant to summarise it.
+The people and the Git history are made up for teaching. The Git history records who changed what, when and why: ask your AI assistant to summarise it.
 
 ## News
 
