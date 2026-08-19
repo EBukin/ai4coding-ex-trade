@@ -93,10 +93,15 @@ Sources and licences:
 
 The people and the Git history are made up for teaching. The Git history records who changed what, when and why: ask your AI assistant to summarise it.
 
+## Contact
+
+- Questions about this project: <contact@worldbank.org>
+
 ## News
 
 Newest first. One entry per meaningful change or decision.
 
+- 2026-08-19, Amina: Added the MIT License with the World Bank IGO Rider, and a contact. Why: both are needed before the project is shared outside the team.
 - 2026-06-24, Amina: Grouped the code by language in `code/python/`, `code/r/` and `code/stata/`. Why: with data prep in its own folder and three languages, one flat `code/` folder was hard to scan.
 - 2026-06-16, Grace: The Stata master now stops with a clear message when it is not run from the project root. Why: the old error, "file not found" deep inside a do-file, did not say what to do.
 - 2026-06-03, Amina: Wrote the rules for AI assistants in `AGENTS.md`. Why: new team members use assistants to find their way, and the assistant should explain before it changes anything.
@@ -109,3 +114,6 @@ Newest first. One entry per meaningful change or decision.
 - 2026-03-09, Amina: Added the clean trade data and the script that makes them, `code/00_data_prep/prepare_data.py`. Clean data and outputs are now committed. Why: everyone works from the same data, and people without R or Stata still see every result.
 - 2026-03-02, Amina: Started the project from the team template.
 
+## License
+
+This project is licensed under the [MIT License](LICENSE) together with the [World Bank IGO Rider](LICENSE-IGO-RIDER.md). The Rider is purely procedural: it reserves all privileges and immunities enjoyed by the World Bank, without adding restrictions to the MIT permissions. Please review both files before using, distributing or contributing.
