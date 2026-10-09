@@ -101,6 +101,7 @@ The people and the Git history are made up for teaching. The Git history records
 
 Newest first. One entry per meaningful change or decision.
 
+- 2026-10-09, Amina: Python and R may now use any package, if the README says how to install it. Environments only on request. Why: new work, such as dashboards, needs more than the agreed few packages, and everyone must still be able to run the code.
 - 2026-08-19, Amina: Added the MIT License with the World Bank IGO Rider, and a contact. Why: both are needed before the project is shared outside the team.
 - 2026-06-24, Amina: Grouped the code by language in `code/python/`, `code/r/` and `code/stata/`. Why: with data prep in its own folder and three languages, one flat `code/` folder was hard to scan.
 - 2026-06-16, Grace: The Stata master now stops with a clear message when it is not run from the project root. Why: the old error, "file not found" deep inside a do-file, did not say what to do.
