@@ -1,6 +1,6 @@
 # Store text files with LF line endings, whatever the operating system.
 # R and Stata write CRLF on Windows; this stops a rerun showing as a change.
-* text=auto
+* text=auto eol=lf
 
 # Binary outputs: never convert line endings or show text diffs.
 *.png binary
