@@ -281,9 +281,9 @@ Picks up the trade unit fix, so the bloc totals come out in US dollars.
         "message": """Cluster standard errors by country pair
 
 Grace reviewed the table and pointed out that the t-statistics were in
-the tens of thousands. Flows of one pair are correlated over time, so the default
-IID standard errors are far too small. Clustering by pair gives honest
-uncertainty; the coefficients do not change.
+the tens of thousands. Flows of one pair are correlated over time, so
+the default IID standard errors are far too small. Clustering by pair
+gives honest uncertainty; the coefficients do not change.
 """,
         "files": {"code/01_gravity.R": "project"},
     },
