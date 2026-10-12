@@ -30,9 +30,11 @@ Help the user keep it clear where every number comes from.
 
 ## Documenting changes (News)
 
+- News is for changes a reader of the project should know about: a new script, output or dashboard; a change in data, method or results; a fixed error in a result.
+- Small edits need no News: comments, wording, plot style, renames, a one-line fix.
+- Offer a News entry once, at a natural break: when a task with such a change is done, when you suggest a commit for it, or when many small edits add up to one. Do not ask after each edit.
+- Show the exact entry, then ask: "Shall I add this to News in the README?" Write it only after the user says yes. Use the same format as the existing entries, newest first.
 - Do not write News on your own.
-- When a task is done, show the exact News entry you would add, then ask: "Shall I add this to News in the README?"
-- Write it only after the user says yes. Use the same format as the existing entries, newest first.
 
 ## Project template
 
