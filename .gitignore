@@ -1,9 +1,10 @@
-# Raw downloads: over 600 MB, rebuilt by _build/make_data.py.
-# Only the two filtered extracts are committed, so the clean data can be
-# rebuilt without downloading again.
-/_build/raw/*
-!/_build/raw/fao_tm_filtered.csv
-!/_build/raw/gravity_filtered.csv
+# Raw downloads (over 600 MB) go to _build/project/data/raw/, which the
+# project's own .gitignore ignores. Only the two filtered extracts there
+# are committed on dev (force-added), so the clean data can be rebuilt
+# without downloading again. They never reach main.
+
+# Old local download folder from before the data prep moved
+/_build/raw/
 
 # Build output
 /_build/out/

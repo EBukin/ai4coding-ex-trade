@@ -16,23 +16,24 @@ them.
 
 ## What is here
 
-| Path | Holds |
-|---|---|
-| `_build/make_data.py` | Raw downloads to clean data (`project/data/clean/`) |
-| `_build/raw/` | Filtered extracts of the raw downloads (the downloads themselves are not committed) |
-| `_build/project/` | The final state of the learner project, outputs included |
-| `_build/history/commits.py` | Commit-by-commit spec of the history |
-| `_build/history/files/` | Earlier versions of files, used by the spec |
-| `_build/build_history.py` | Replays the spec into `main` and the feature branches |
-| `_build/research/` | Notes on data sources and tooling |
+- `_build/project/`: the final state of the learner project, outputs included.
+- `_build/project/code/00_data_prep/prepare_data.py`: raw downloads to clean data. It is part of the learner project; see its README.
+- `_build/project/data/raw/`: the two filtered extracts of the raw downloads. They are committed on `dev` only (force-added, because the project ignores `data/raw/`). The downloads themselves are not committed.
+- `_build/history/commits.py`: commit-by-commit spec of the history.
+- `_build/history/files/`: earlier versions of files, used by the spec.
+- `_build/build_history.py`: replays the spec into `main` and the feature branches.
+- `_build/plans/`: plans for changes to the build.
+- `_build/research/`: notes on data sources and tooling.
 
 ## Rebuild
 
-From the repository root, with Python 3.11+ and Git:
+With Python 3.11+ (with `pandas`) and Git:
 
 ```
-python _build/make_data.py          # clean data from _build/raw/ (downloads if needed)
-python _build/build_history.py      # replays the history into main and the branches
+cd _build/project
+python code/00_data_prep/prepare_data.py   # clean data from data/raw/ (downloads if needed)
+cd ../..
+python _build/build_history.py             # replays the history into main and the branches
 ```
 
 To rerun the analyses, run the three master scripts in `_build/project/`
