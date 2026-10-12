@@ -1,5 +1,5 @@
 * 02_figure.do: scatter of log farm output against log subsidy.
-* Needs the data from 01_prepare.do. Run through code/00_master.do.
+* Needs the data from 01_prepare.do. Run through code/stata/00_master.do.
 *
 * The slope of the fitted line is the total elasticity of output with
 * respect to subsidy. 03_sem.do splits it into direct and indirect parts.
@@ -7,7 +7,7 @@
 * Stop with a clear message if the prepared data are not in memory
 capture confirm variable ln_output ln_subsidy
 if _rc {
-    display as error "Run code/01_prepare.do first (or code/00_master.do)."
+    display as error "Run code/stata/01_prepare.do first (or code/stata/00_master.do)."
     exit 111
 }
 

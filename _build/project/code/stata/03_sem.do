@@ -1,5 +1,5 @@
 * 03_sem.do: path model of how subsidy reaches farm output.
-* Needs the data from 01_prepare.do. Run through code/00_master.do.
+* Needs the data from 01_prepare.do. Run through code/stata/00_master.do.
 *
 * Two equations, estimated together:
 *   ln_fert   <- ln_subsidy           subsidy changes fertiliser use
@@ -9,7 +9,7 @@
 * Stop with a clear message if the prepared data are not in memory
 capture confirm variable ln_output ln_subsidy ln_fert
 if _rc {
-    display as error "Run code/01_prepare.do first (or code/00_master.do)."
+    display as error "Run code/stata/01_prepare.do first (or code/stata/00_master.do)."
     exit 111
 }
 
