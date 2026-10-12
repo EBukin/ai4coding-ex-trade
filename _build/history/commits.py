@@ -19,6 +19,9 @@ COMMITS: in replay order. Each commit is a dict:
              "project:<path>" the final state of another path in ../project/,
                               for a file that moved later with no other change
              "files/<name>"   a stored earlier version in files/
+                              (files/m13/ holds the docs as they were at M13;
+                              the derives for earlier commits read them, so
+                              later edits to ../project/ leave M1-M13 as is)
              "derive:<name>"  an earlier version computed by build_history.py
              None             delete the file
 """
@@ -565,9 +568,9 @@ decision.
         "files": {
             **{f"code/{name}": None for _, name in MOVED},
             **{f"code/{lang}/{name}": "project" for lang, name in MOVED},
-            "code/README.md": "project",
+            "code/README.md": "files/m13/code/README.md",
             "README.md": "derive:readme_m12",
-            "AGENTS.md": "project",
+            "AGENTS.md": "files/m13/AGENTS.md",
         },
     },
     {
@@ -602,7 +605,105 @@ keep their own licences, listed in data/raw/README.md.
         "files": {
             "LICENSE": "project",
             "LICENSE-IGO-RIDER.md": "project",
+            "README.md": "files/m13/README.md",
+        },
+    },
+    # ---- After publishing: packages, then the dashboards -----------------
+    {
+        "id": "M14", "branch": "main", "author": "amina",
+        "date": "2026-10-09T10:20:14+02:00",
+        "message": """Allow any package if its install is written down
+
+The rule "pandas and matplotlib, fixest and base R only" kept the code
+easy to run, but it blocks new work such as dashboards. What matters
+is that everyone can run the code: AGENTS.md now allows any Python or
+R package, as long as the README says which ones and how to install
+them. Environments only when someone asks for full reproducibility,
+since most readers just need the install line.
+""",
+        "files": {"AGENTS.md": "derive:agents_m14", "README.md": "derive:readme_m14"},
+    },
+    {
+        "id": "D1", "branch": "shiny/dashboards", "from": "M14", "author": "amina",
+        "date": "2026-10-12T09:35:21+02:00",
+        "message": """Add the two dashboards as they were built
+
+The Python and R dashboards were built on an earlier copy of this
+project: 27 countries, and the code in one dashboard/ folder. They are
+added here unchanged, one folder per language, so the next commits
+show exactly what it takes to run them on the current data.
+
+They do not run yet: they look for data/clean/ one folder up.
+""",
+        "files": {
+            "code/py-shiny/app.py": "files/shiny/app.v1.py",
+            "code/py-shiny/prototype.py": "files/shiny/prototype.v1.py",
+            "code/r-shiny/app.R": "files/shiny/app.v1.R",
+        },
+    },
+    {
+        "id": "D2", "branch": "shiny/dashboards", "author": "mei",
+        "date": "2026-10-12T16:48:05+08:00",
+        "message": """Run the Python dashboard on the current data
+
+The app now finds data/clean/ two folders up, or next to itself in a
+deployed copy. It no longer assumes 27 countries or fixed years: the
+titles count the countries and the year slider follows the data.
+
+Checked with prototype.py --all: bloc totals and gravity coefficients
+match outputs/data/ exactly, and the path model matches the Stata
+estimates. The README says how to install, run and check it.
+""",
+        "files": {
+            "code/py-shiny/app.py": "project",
+            "code/py-shiny/prototype.py": "project",
+            "code/py-shiny/README.md": "derive:py_shiny_readme_d2",
+        },
+    },
+    {
+        "id": "D3", "branch": "shiny/dashboards", "author": "tomas",
+        "date": "2026-10-12T08:12:47-03:00",
+        "message": """Run the R dashboard on the current data
+
+shiny::runApp("code/r-shiny") starts the app inside its own folder, so
+it now looks for data/clean/ two folders up, or next to app.R in a
+deployed copy. With 46 countries the country box got very long; it now
+scrolls, as in the Python app.
+
+The gravity results for all countries match outputs/data/. The README
+says how to install and run it.
+""",
+        "files": {
+            "code/r-shiny/app.R": "project",
+            "code/r-shiny/README.md": "derive:r_shiny_readme_d3",
+        },
+    },
+    {
+        "id": "MD", "branch": "main", "merge": "shiny/dashboards", "author": "amina",
+        "date": "2026-10-12T14:05:40+02:00",
+        "message": """Merge branch 'shiny/dashboards'
+
+Both dashboards run on the current data and match the committed
+results.
+""",
+    },
+    {
+        "id": "M15", "branch": "main", "author": "amina",
+        "date": "2026-10-12T14:30:02+02:00",
+        "message": """Link the dashboards and their online versions
+
+Most readers will try the dashboards online before they run anything,
+so the README links both, and says that the online copies still use
+the earlier 27-country data. code/README.md lists the two folders, and
+AGENTS.md records them as a structure decision: Shiny apps are started
+by hand, so the master scripts do not run them.
+""",
+        "files": {
             "README.md": "project",
+            "AGENTS.md": "project",
+            "code/README.md": "project",
+            "code/py-shiny/README.md": "project",
+            "code/r-shiny/README.md": "project",
         },
     },
 ]

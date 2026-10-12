@@ -14,6 +14,7 @@ How to run all the code, stage by stage.
 - `r/`: gravity model of farm trade.
 - `stata/`: subsidy pass-through.
 - The analysis stages are independent: run one, two or all three, in any order. Each reads `data/clean/` and writes to `outputs/`.
+- `py-shiny/` and `r-shiny/` are dashboards, not stages: you start them by hand. They read `data/clean/` and write nothing.
 
 ## `00_data_prep/`: data preparation (optional)
 
@@ -47,3 +48,11 @@ Run: in Stata, `cd` to the project root, then `do code/stata/00_master.do`
 - `01_prepare.do`: loads the farm support data and takes logs.
 - `02_figure.do`: scatter of log output against log subsidy.
 - `03_sem.do`: path model with `sem` (linked equations estimated together), effects with `estat teffects`, Excel and CSV tables.
+
+## `py-shiny/` and `r-shiny/`: dashboards (optional)
+
+The same dashboard in Python and in R: bloc charts, gravity model, subsidy path model and trade against distance, for any countries and years.
+
+- Python: `python -m shiny run --reload code/py-shiny/app.py`. See [`py-shiny/README.md`](py-shiny/README.md).
+- R: in the R console, `shiny::runApp("code/r-shiny")`. See [`r-shiny/README.md`](r-shiny/README.md).
+- Live versions: [Python](https://datanalytics.worldbank.org/ai4coding-ex2-3-py-shiny/) and [R](https://datanalytics.worldbank.org/ai4coding-ex2-3-r-shiny/). They run on an earlier copy of the data with 27 countries.

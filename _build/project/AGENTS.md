@@ -52,10 +52,13 @@ Where this project departs from the template, and why. Add a bullet only when th
 - 2026-03-09: clean data and outputs are committed to Git. Why: not everyone has R or Stata, and they still need to see every result.
 - 2026-03-09: data prep is a separate stage in `code/00_data_prep/`, and the master scripts do not run it. Why: it needs 600 MB of downloads; the analyses only need the clean files.
 - 2026-06-24: scripts are grouped by language in `code/python/`, `code/r/` and `code/stata/`. Why: with data prep in its own folder and three languages, one flat `code/` folder was hard to scan.
+- 2026-10-12: the dashboards are in `code/py-shiny/` and `code/r-shiny/`, and the master scripts do not run them. Why: a Shiny app is started by hand, not run in order, and its file must be called `app.py` or `app.R`.
 
 ## Code and packages
 
-- Use only these packages: Python `pandas` and `matplotlib`; R `fixest` and base R; Stata built-in commands. Ask before you add any other.
+- Python and R may use any package, as long as the code stays reproducible: say which packages it needs and how to install them, in the README of the folder and in `README.md`.
+- Do not set up environments (`venv`, `renv`) by default. Set one up only when the user asks for full reproducibility.
+- Stata: built-in commands only. Ask before you add any other.
 - Add each new script to the master script of its language.
 - Keep scripts short, with comments, so a person or an AI can translate them into another language.
 - Do not change the columns of files in `outputs/data/`. For a new result, write a new file.

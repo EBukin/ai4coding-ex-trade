@@ -39,6 +39,9 @@ BUILD = Path(__file__).resolve().parent
 ROOT = BUILD.parent
 PROJECT = BUILD / "project"
 HISTORY = BUILD / "history"
+# Docs as they were at M13. Commits up to M13 are derived from these, so
+# later changes to the same files in project/ do not rewrite old commits.
+SNAPSHOT = HISTORY / "files" / "m13"
 OUT = BUILD / "out" / "farm-trade-support.zip"
 TOP = "farm-trade-support"
 # Fixed zip timestamp.
@@ -65,7 +68,9 @@ def final(rel):
 
 
 def text(rel):
-    return final(rel).decode("utf-8")
+    """Text of a file for the derives: the M13 snapshot if there is one."""
+    snap = SNAPSHOT / rel
+    return (read(snap) if snap.exists() else final(rel)).decode("utf-8")
 
 
 def cut(s, old, new=""):
@@ -247,6 +252,37 @@ def readme_m5():
     return news(readme_f1(), "2026-04-06, Amina")
 
 
+# After M13: built from the final files, not from the snapshot.
+
+def now(rel):
+    return final(rel).decode("utf-8")
+
+
+def readme_m14():
+    """The M13 README plus the News entry on packages."""
+    entry = [x for x in now("README.md").splitlines(keepends=True)
+             if x.startswith("- 2026-10-09, Amina: ")]
+    assert len(entry) == 1
+    head = "Newest first. One entry per meaningful change or decision.\n\n"
+    return cut(text("README.md"), head, head + entry[0])
+
+
+def agents_m14():
+    return drop(now("AGENTS.md"),
+                "- 2026-10-12: the dashboards are in `code/py-shiny/` and "
+                "`code/r-shiny/`, and the master scripts do not run them. Why: a "
+                "Shiny app is started by hand, not run in order, and its file must "
+                "be called `app.py` or `app.R`.")
+
+
+def shiny_readme(folder):
+    """Folder README before the link to the online version was added."""
+    lines = [x for x in now(f"code/{folder}/README.md").splitlines(keepends=True)
+             if x.startswith("- Live version: ")]
+    assert len(lines) == 1
+    return cut(now(f"code/{folder}/README.md"), lines[0])
+
+
 # AGENTS.md and code/README.md
 
 def agents_m9():
@@ -398,6 +434,10 @@ DERIVE = {
     "readme_g1": readme_g1,
     "readme_m12": readme_m12,
     "readme_m11": readme_m11,
+    "readme_m14": readme_m14,
+    "agents_m14": agents_m14,
+    "py_shiny_readme_d2": lambda: shiny_readme("py-shiny"),
+    "r_shiny_readme_d3": lambda: shiny_readme("r-shiny"),
     "agents_m5": agents_m5,
     "agents_m9": agents_m9,
     "code_readme_m6": code_readme_m6,
