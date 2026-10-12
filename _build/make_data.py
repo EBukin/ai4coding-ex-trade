@@ -55,7 +55,7 @@ GRAV_ZIP = RAW / "gravity.zip"
 GRAV_MEMBER = "Gravity_V202211.csv"
 GRAV_CACHE = RAW / "gravity_filtered.csv"
 
-# 27 countries in 6 blocs: iso3, name, bloc, M49 code (as used by FAOSTAT).
+# 46 countries in 6 blocs: iso3, name, bloc, M49 code (as used by FAOSTAT).
 # China is FAO "China; mainland" (FAO code 41, M49 156).
 # Belgium is M49 056 from 2000 (Belgium-Luxembourg, 058, ends in 1999).
 COUNTRIES = [
@@ -68,6 +68,14 @@ COUNTRIES = [
     ("BEL", "Belgium", "EU", "056"),
     ("DNK", "Denmark", "EU", "208"),
     ("IRL", "Ireland", "EU", "372"),
+    ("AUT", "Austria", "EU", "040"),
+    ("SWE", "Sweden", "EU", "752"),
+    ("FIN", "Finland", "EU", "246"),
+    ("PRT", "Portugal", "EU", "620"),
+    ("GRC", "Greece", "EU", "300"),
+    ("CZE", "Czechia", "EU", "203"),
+    ("HUN", "Hungary", "EU", "348"),
+    ("SVK", "Slovakia", "EU", "703"),
     ("USA", "United States", "USMCA", "840"),
     ("CAN", "Canada", "USMCA", "124"),
     ("MEX", "Mexico", "USMCA", "484"),
@@ -75,17 +83,28 @@ COUNTRIES = [
     ("ARG", "Argentina", "Mercosur", "032"),
     ("URY", "Uruguay", "Mercosur", "858"),
     ("PRY", "Paraguay", "Mercosur", "600"),
+    ("CHL", "Chile", "Mercosur", "152"),
+    ("BOL", "Bolivia", "Mercosur", "068"),
     ("IDN", "Indonesia", "ASEAN", "360"),
     ("MYS", "Malaysia", "ASEAN", "458"),
     ("THA", "Thailand", "ASEAN", "764"),
     ("VNM", "Viet Nam", "ASEAN", "704"),
     ("PHL", "Philippines", "ASEAN", "608"),
     ("SGP", "Singapore", "ASEAN", "702"),
+    ("KHM", "Cambodia", "ASEAN", "116"),
+    ("MMR", "Myanmar", "ASEAN", "104"),
+    ("LAO", "Lao PDR", "ASEAN", "418"),
+    ("BRN", "Brunei", "ASEAN", "096"),
     ("CHN", "China", "East Asia", "156"),
     ("JPN", "Japan", "East Asia", "392"),
     ("KOR", "Korea", "East Asia", "410"),
+    ("TWN", "Taiwan", "East Asia", "158"),
+    ("HKG", "Hong Kong", "East Asia", "344"),
+    ("MNG", "Mongolia", "East Asia", "496"),
     ("AUS", "Australia", "Oceania", "036"),
     ("NZL", "New Zealand", "Oceania", "554"),
+    ("FJI", "Fiji", "Oceania", "242"),
+    ("VUT", "Vanuatu", "Oceania", "548"),
 ]
 ISO3 = sorted(c[0] for c in COUNTRIES)
 M49_TO_ISO3 = {c[3]: c[0] for c in COUNTRIES}
@@ -119,7 +138,7 @@ def download(url: str, dest: Path) -> None:
 
 # ---------------------------------------------------------------- FAOSTAT
 def build_fao_cache() -> None:
-    """Stream the 8.5 GB FAOSTAT CSV and keep the 27 countries, 2000-2019.
+    """Stream the 8.5 GB FAOSTAT CSV and keep the 46 countries, 2000-2019.
 
     Sums Value (1000 USD) over all items for import value (5622) and
     export value (5922). TM has no aggregate item; all items are farm goods.
@@ -157,7 +176,7 @@ def build_fao_cache() -> None:
 
 # ---------------------------------------------------------------- CEPII
 def build_gravity_cache() -> None:
-    """Stream Gravity_V202211.csv and keep the 27 countries, 2000-2019."""
+    """Stream Gravity_V202211.csv and keep the 46 countries, 2000-2019."""
     download(GRAV_URL, GRAV_ZIP)
     cols = ["year", "iso3_o", "iso3_d", "country_exists_o", "country_exists_d",
             "dist", "contig", "comlang_off", "fta_wto", "gdp_o", "gdp_d"]
@@ -267,7 +286,7 @@ Do not edit these files by hand.
 
 ## `countries.csv`
 
-One row per country: 27 countries in 6 trade blocs.
+One row per country: 46 countries in 6 trade blocs.
 
 | variable | description |
 |---|---|
@@ -276,12 +295,15 @@ One row per country: 27 countries in 6 trade blocs.
 | `bloc` | Trade bloc used for grouping: EU, USMCA, Mercosur, ASEAN, East Asia, Oceania. |
 
 The bloc is a fixed label for grouping. It does not change over time, even
-where membership did (for example, Poland joined the EU in 2004).
+where membership did (for example, Poland joined the EU in 2004). Chile and
+Bolivia are grouped with Mercosur for simplicity: Chile is an associate
+state, and Bolivia became a full member only in 2024. Taiwan and Hong Kong
+are separate economies in FAOSTAT and CEPII, so they are kept separate.
 
 ## `farm_trade.csv`
 
 Bilateral trade in agricultural products. One row per exporter, importer and
-year: every ordered pair of the 27 countries, 2000-2019 ({n_trade} rows).
+year: every ordered pair of the 46 countries, 2000-2019 ({n_trade} rows).
 Pairs with no recorded trade are kept with `trade_usd = 0`.
 
 | variable | unit | description |
@@ -314,7 +336,7 @@ country codes and years are real so the file joins to the others, but the
 values carry no information about those countries. Use them to practise
 methods, not to draw conclusions.
 
-One row per country and year: 27 countries, 2000-2019 ({n_support} rows).
+One row per country and year: 46 countries, 2000-2019 ({n_support} rows).
 
 | variable | unit | description |
 |---|---|---|

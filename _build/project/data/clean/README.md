@@ -5,7 +5,7 @@ Do not edit these files by hand.
 
 ## `countries.csv`
 
-One row per country: 27 countries in 6 trade blocs.
+One row per country: 46 countries in 6 trade blocs.
 
 | variable | description |
 |---|---|
@@ -14,12 +14,15 @@ One row per country: 27 countries in 6 trade blocs.
 | `bloc` | Trade bloc used for grouping: EU, USMCA, Mercosur, ASEAN, East Asia, Oceania. |
 
 The bloc is a fixed label for grouping. It does not change over time, even
-where membership did (for example, Poland joined the EU in 2004).
+where membership did (for example, Poland joined the EU in 2004). Chile and
+Bolivia are grouped with Mercosur for simplicity: Chile is an associate
+state, and Bolivia became a full member only in 2024. Taiwan and Hong Kong
+are separate economies in FAOSTAT and CEPII, so they are kept separate.
 
 ## `farm_trade.csv`
 
 Bilateral trade in agricultural products. One row per exporter, importer and
-year: every ordered pair of the 27 countries, 2000-2019 (14,040 rows).
+year: every ordered pair of the 46 countries, 2000-2019 (41,400 rows).
 Pairs with no recorded trade are kept with `trade_usd = 0`.
 
 | variable | unit | description |
@@ -38,9 +41,9 @@ Pairs with no recorded trade are kept with `trade_usd = 0`.
 How `trade_usd` is built: FAOSTAT reports each flow twice. We use the
 importer's reported import value. Where the importer reports nothing, we use
 the exporter's reported export value instead (a "mirror" flow). Where neither
-reports, the flow is set to 0. In this file: 13,597 import-reported,
-413 mirror, 30 with no report. 32 rows have
-`trade_usd = 0`: the 30 with no report plus 2 where the
+reports, the flow is set to 0. In this file: 34,082 import-reported,
+2822 mirror, 4496 with no report. 5008 rows have
+`trade_usd = 0`: the 4496 with no report plus 512 where the
 reported value itself is 0. FAOSTAT values are in thousand US dollars; they
 are multiplied by 1,000 here.
 
@@ -52,7 +55,7 @@ country codes and years are real so the file joins to the others, but the
 values carry no information about those countries. Use them to practise
 methods, not to draw conclusions.
 
-One row per country and year: 27 countries, 2000-2019 (540 rows).
+One row per country and year: 46 countries, 2000-2019 (920 rows).
 
 | variable | unit | description |
 |---|---|---|
