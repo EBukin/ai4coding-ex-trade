@@ -2,19 +2,21 @@
 #
 # The dashboard will show three parts of this project for any choice of
 # countries and years:
-#   1. bloc charts (from code/01_bloc_trade.py, 02_bloc_trend.py, 03_bloc_heatmap.py)
-#   2. PPML gravity model (from code/01_gravity.R), here with pyfixest
-#   3. subsidy path model (from code/03_sem.do), here as two OLS regressions
+#   1. bloc charts (from code/python/01_bloc_trade.py, 02_bloc_trend.py,
+#      03_bloc_heatmap.py)
+#   2. PPML gravity model (from code/r/01_gravity.R), here with pyfixest
+#   3. subsidy path model (from code/stata/03_sem.do), here as two OLS regressions
 #
 # This script tries the outputs on one filter before any dashboard exists.
-# The dashboard (dashboard/app.py) imports the functions below.
+# The dashboard (code/py-shiny/app.py) imports the functions below.
 #
 # Run from the project root:
-#   python dashboard/prototype.py          EU and Mercosur, 2010-2019
-#   python dashboard/prototype.py --all    all countries, 2000-2019, and a
-#                                          check against outputs/data/
-#   python dashboard/prototype.py --mockup trade vs distance mockup (step 4)
-# Output: outputs/prototype/<filter>/  figures (PNG) and tables (CSV)
+#   python code/py-shiny/prototype.py          EU and Mercosur, 2010-2019
+#   python code/py-shiny/prototype.py --all    all countries, 2000-2019, and
+#                                              a check against outputs/data/
+#   python code/py-shiny/prototype.py --mockup trade vs distance mockup
+# Output: outputs/prototype/<filter>/  figures (PNG) and tables (CSV).
+# These files are only for checking; they are not committed.
 #
 # Packages: pandas, matplotlib, statsmodels, pyfixest (approved by the user).
 
@@ -31,10 +33,11 @@ import numpy as np
 import pandas as pd
 import statsmodels.formula.api as smf
 
-# Project root = the folder above dashboard/. Paths work from any folder.
-# A deployed copy has data/clean/ next to this file instead, so look there too.
+# Project root = two folders above this one (code/py-shiny/). Paths work from
+# any folder. A deployed copy has data/clean/ next to this file instead, so
+# look there too.
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parent if (HERE.parent / "data/clean/farm_trade.csv").exists() else HERE
+ROOT = HERE.parents[1] if (HERE.parents[1] / "data/clean/farm_trade.csv").exists() else HERE
 if not (ROOT / "data/clean/farm_trade.csv").exists():
     sys.exit("Cannot find data/clean/ next to this folder or inside it.")
 
@@ -80,7 +83,7 @@ def describe_filter(isos, countries, years):
     whole = [b for b in BLOCS
              if b in set(blocs) and (countries["bloc"] == b).sum() == (blocs == b).sum()]
     if len(isos) == len(countries):
-        who = "all 27 countries"
+        who = f"all {len(countries)} countries"
     elif len(whole) == blocs.nunique():
         who = ", ".join(whole)
     elif len(isos) == 1:
@@ -191,7 +194,7 @@ def plot_heatmap(bt, title_note):
 # ---- Part 2: gravity model ---------------------------------------------------
 
 def gravity(trade_f):
-    """PPML gravity model, same as code/01_gravity.R (fixest::fepois):
+    """PPML gravity model, same as code/r/01_gravity.R (fixest::fepois):
     exporter-year and importer-year fixed effects, errors clustered by pair.
     Returns one row per regressor."""
     import pyfixest as pf  # slow first import (about 20 s); later calls are fast
@@ -316,7 +319,7 @@ def plot_trade_distance(trade_f, coefs, countries, title_note):
 # ---- Part 3: subsidy path model ---------------------------------------------
 
 def sem_effects(support_f):
-    """Recursive path model of code/03_sem.do as two OLS regressions.
+    """Recursive path model of code/stata/03_sem.do as two OLS regressions.
     Same point estimates as Stata sem. Standard error for the direct path only;
     the indirect effect needs a delta method or bootstrap."""
     d = support_f.assign(ln_subsidy=np.log(support_f["subsidy"]),
@@ -413,7 +416,8 @@ if __name__ == "__main__":
         # Step 4 mockup: trade against distance, all countries, 2000-2019
         trade_f, _ = filter_data(trade, support, countries["iso3"].tolist(), (2000, 2019))
         coefs, msg = gravity_safe(trade_f, len(countries))
-        fig = plot_trade_distance(trade_f, coefs, countries, "all 27 countries, 2000-2019")
+        fig = plot_trade_distance(trade_f, coefs, countries,
+                                  describe_filter(countries["iso3"], countries, (2000, 2019)))
         out = ROOT / "outputs/prototype/trade_distance_mockup.png"
         out.parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(out, dpi=150)

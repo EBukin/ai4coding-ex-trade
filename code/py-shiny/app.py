@@ -5,10 +5,10 @@
 # path model for that filter. The analysis functions live in prototype.py
 # in this folder; this file only builds the page around them.
 #
-# Start (from the project root):  python -m shiny run --reload dashboard/app.py
-# Data: ../data/clean/ (project layout) or ./data/clean/ (deployed copy).
+# Start (from the project root):  python -m shiny run --reload code/py-shiny/app.py
+# Data: ../../data/clean/ (project layout) or ./data/clean/ (deployed copy).
 # Stop: Ctrl+C in the terminal.
-# Layout: dashboard/LAYOUT.md
+# Layout: code/py-shiny/README.md
 
 import sys
 from pathlib import Path
@@ -26,6 +26,8 @@ proto.plt.rcParams.update({"font.size": 8})
 
 trade, support, countries = proto.load_data()
 ALL_ISOS = countries["iso3"].tolist()
+# First and last year in the data, for the year slider
+YEARS = (int(trade["year"].min()), int(trade["year"].max()))
 
 # Country choices grouped by bloc: {"EU": {"BEL": "Belgium (BEL)", ...}, ...}
 CHOICES = {
@@ -65,7 +67,7 @@ app_ui = ui.page_sidebar(
             ui.input_action_button("clear", "Clear", class_="btn-sm btn-outline-secondary"),
             class_="d-flex gap-1",
         ),
-        ui.input_slider("years", "Years", min=2000, max=2019, value=(2000, 2019),
+        ui.input_slider("years", "Years", min=YEARS[0], max=YEARS[1], value=YEARS,
                         step=1, sep=""),
         ui.input_action_button("run", "Run", class_="btn-primary"),
         ui.output_ui("status"),
