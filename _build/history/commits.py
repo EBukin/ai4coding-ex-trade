@@ -716,6 +716,19 @@ the reproducibility rule works for them in the same way: the README
 says what to install and how. The ban on tables goes: a small table is
 sometimes the clearest way to compare numbers.
 """,
+        "files": {"AGENTS.md": "files/m16/AGENTS.md"},
+    },
+    {
+        "id": "M17", "branch": "main", "author": "amina",
+        "date": "2026-10-12T17:40:15+02:00",
+        "message": """Ask about News at natural breaks, not after every edit
+
+The assistant asked "Shall I add this to News?" after each small edit,
+so people learned to click past it. AGENTS.md now says what News is
+for (new scripts, outputs, data, methods or results, fixed errors),
+that small edits need none, and that the assistant offers one entry
+when a task is done or a commit is due.
+""",
         "files": {"AGENTS.md": "project"},
     },
 ]
