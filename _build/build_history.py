@@ -268,7 +268,8 @@ def readme_m14():
 
 
 def agents_m14():
-    return drop(now("AGENTS.md"),
+    """AGENTS.md at M15 (files/m15/) without the dashboard decision."""
+    return drop(read(HISTORY / "files/m15/AGENTS.md").decode("utf-8"),
                 "- 2026-10-12: the dashboards are in `code/py-shiny/` and "
                 "`code/r-shiny/`, and the master scripts do not run them. Why: a "
                 "Shiny app is started by hand, not run in order, and its file must "

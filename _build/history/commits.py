@@ -700,10 +700,22 @@ by hand, so the master scripts do not run them.
 """,
         "files": {
             "README.md": "project",
-            "AGENTS.md": "project",
+            "AGENTS.md": "files/m15/AGENTS.md",
             "code/README.md": "project",
             "code/py-shiny/README.md": "project",
             "code/r-shiny/README.md": "project",
         },
+    },
+    {
+        "id": "M16", "branch": "main", "author": "amina",
+        "date": "2026-10-12T16:20:44+02:00",
+        "message": """Treat Stata like Python and R, and allow tables
+
+Stata users need community packages too, such as estout from SSC, and
+the reproducibility rule works for them in the same way: the README
+says what to install and how. The ban on tables goes: a small table is
+sometimes the clearest way to compare numbers.
+""",
+        "files": {"AGENTS.md": "project"},
     },
 ]
