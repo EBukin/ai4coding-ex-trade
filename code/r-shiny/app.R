@@ -1,4 +1,4 @@
-# dashboard/app.R: Shiny dashboard of farm trade and farm support.
+# code/r-shiny/app.R: Shiny dashboard of farm trade and farm support.
 #
 # One page. Pick countries and years in the left sidebar, then click Run.
 # The page shows, for the selected countries and years:
@@ -7,13 +7,13 @@
 #   3. subsidy pass-through (path model) table
 #   4. farm trade against distance, with the gravity line
 #
-# Built from dashboard/prototype.R (same functions, copied below) and
-# dashboard/LAYOUT.md. Models rerun only when you click Run. On first load
-# the page shows results for all countries, 2000-2019.
+# The functions were first tried in a prototype script; the page follows the
+# layout in code/r-shiny/README.md. Models rerun only when you click Run.
+# On first load the page shows results for all countries, 2000-2019.
 #
-# Start it (see README.md, "Run the dashboard"):
+# Start it (see code/r-shiny/README.md):
 #   open this file and click "Run Shiny App", or in the R console run
-#   shiny::runApp("dashboard") from the project root.
+#   shiny::runApp("code/r-shiny") from the project root.
 #
 # Packages: shiny, bslib, fixest and base R (base graphics for the charts).
 # NOTE: farm_support.csv is SYNTHETIC (made up). See data/clean/README.md.
@@ -23,12 +23,12 @@ library(bslib)
 library(fixest)
 
 # ---- Load data ---------------------------------------------------------------
-# shiny::runApp("dashboard") runs the app from inside dashboard/, while the
-# Shiny extension may run it from the project root. Look for the data in
-# both places, so the app works either way.
-root <- if (file.exists("../data/clean/farm_trade.csv")) ".." else "."
+# shiny::runApp("code/r-shiny") runs the app from inside code/r-shiny/, so
+# the data are two folders up. A deployed copy has data/clean/ next to
+# app.R. Look in both places, so the app works either way.
+root <- if (file.exists("../../data/clean/farm_trade.csv")) "../.." else "."
 if (!file.exists(file.path(root, "data/clean/farm_trade.csv"))) {
-  stop("Cannot find data/clean/. Start the app from the project root or from dashboard/.")
+  stop("Cannot find data/clean/. Start the app with shiny::runApp(\"code/r-shiny\") from the project root.")
 }
 trade     <- read.csv(file.path(root, "data/clean/farm_trade.csv"))
 support   <- read.csv(file.path(root, "data/clean/farm_support.csv"))
@@ -152,7 +152,7 @@ gravity_guard <- function(trade_f, n_cty, min_countries = 6) {
 }
 
 # PPML with exporter-year and importer-year fixed effects, errors clustered by
-# country pair: the same model as code/01_gravity.R.
+# country pair: the same model as code/r/01_gravity.R.
 # Returns a list: coefs (table), n_obs, n_pairs; or a list with only a message.
 # The coefficients are associations, not causal effects.
 fit_gravity <- function(trade_f, n_cty) {
@@ -294,6 +294,8 @@ ui <- page_sidebar(
   fillable = FALSE,   # fixed plot heights; the page scrolls on a small screen
   sidebar = sidebar(
     width = 290,
+    # Keep the country box short: scroll inside it when many are selected
+    tags$style(".selectize-input { max-height: 170px; overflow-y: auto; }"),
     tags$strong("Add a bloc"),
     div(style = "display: flex; flex-wrap: wrap; gap: 4px;", bloc_buttons),
     div(style = "display: flex; gap: 4px;",
