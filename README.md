@@ -1,7 +1,7 @@
 # farm-trade-support: build branch
 
-This `dev` branch builds the example repository for exercise 1 of the
-"AI for coding" course: a small project on farm trade and farm support with
+This `dev` branch builds the example repository for the "AI for coding"
+course: a small project on farm trade and farm support with
 R, Python and Stata code and a five-month Git history.
 
 **The project and its history are made up for teaching.** The four analysts,
@@ -25,7 +25,6 @@ them.
 | `_build/history/files/` | Earlier versions of files, used by the spec |
 | `_build/build_history.py` | Replays the spec into `main` and the feature branches |
 | `_build/research/` | Notes on data sources and tooling |
-| `exercise/` | The exercise pages and the expected answers |
 
 ## Rebuild
 
