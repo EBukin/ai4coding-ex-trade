@@ -4,6 +4,7 @@
 # Raw downloads are too large for Git (over 600 MB).
 # code/00_data_prep/prepare_data.py downloads them again.
 /data/raw/*
+**/raw/*
 !/data/raw/README.md
 
 # R

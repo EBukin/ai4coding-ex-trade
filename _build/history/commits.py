@@ -230,7 +230,7 @@ they change on every run and hold nothing the outputs do not.
         "files": {
             "code/00_master.do": "files/00_master.v1.do",
             "code/01_prepare.do": "files/01_prepare.v1.do",
-            ".gitignore": "project",
+            ".gitignore": "files/m13/.gitignore",
         },
     },
     {
@@ -730,5 +730,16 @@ that small edits need none, and that the assistant offers one entry
 when a task is done or a commit is due.
 """,
         "files": {"AGENTS.md": "project"},
+    },
+    {
+        "id": "M18", "branch": "main", "author": "amina",
+        "date": "2026-10-12T18:05:32+02:00",
+        "message": """Ignore every raw/ folder, not only data/raw
+
+Copies of raw extracts kept elsewhere in the project, for example a
+local raw/ folder left over from an earlier layout, showed up as
+untracked files. Raw data never go into Git, wherever they sit.
+""",
+        "files": {".gitignore": "project"},
     },
 ]
