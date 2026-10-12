@@ -56,9 +56,8 @@ Where this project departs from the template, and why. Add a bullet only when th
 
 ## Code and packages
 
-- Python and R may use any package, as long as the code stays reproducible: say which packages it needs and how to install them, in the README of the folder and in `README.md`.
+- Python, R and Stata may use any package, as long as the code stays reproducible: say which packages it needs and how to install them, in the README of the folder and in `README.md`.
 - Do not set up environments (`venv`, `renv`) by default. Set one up only when the user asks for full reproducibility.
-- Stata: built-in commands only. Ask before you add any other.
 - Add each new script to the master script of its language.
 - Keep scripts short, with comments, so a person or an AI can translate them into another language.
 - Do not change the columns of files in `outputs/data/`. For a new result, write a new file.
