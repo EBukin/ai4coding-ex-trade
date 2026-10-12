@@ -20,6 +20,7 @@ What you need:
 - Python with `pandas` and `matplotlib`: `pip install pandas matplotlib`
 - R with `fixest` (optional): `install.packages("fixest")`
 - Stata 17 or later (optional)
+- For the dashboards (optional): Python `shiny`, `statsmodels` and `pyfixest`, or R `shiny` and `bslib`. See [Dashboards](#dashboards).
 
 How to run:
 
@@ -32,6 +33,14 @@ How to run:
 - The parts are independent: run one, two or all three.
 
 All outputs are committed. If you do not have R or Stata, you can still see their results in `outputs/`.
+
+## Dashboards
+
+Two dashboards show all three parts for any countries and years you pick: bloc charts, gravity model, subsidy path model, and trade against distance.
+
+- Try them online: [R dashboard](https://datanalytics.worldbank.org/ai4coding-ex2-3-r-shiny/) and [Python dashboard](https://datanalytics.worldbank.org/ai4coding-ex2-3-py-shiny/).
+- The online versions run on an earlier copy of the data with 27 countries, so their numbers differ from the files here.
+- Run them on this project's data: see [`code/r-shiny/README.md`](code/r-shiny/README.md) and [`code/py-shiny/README.md`](code/py-shiny/README.md). Each lists the packages it needs.
 
 ## What's inside
 
@@ -70,7 +79,7 @@ Sources and licences:
 
 - `data/raw/`: notes on the raw sources. Read-only. The raw files themselves are not in Git.
 - `data/clean/`: clean data with a variable list. Made by code only; do not edit by hand.
-- `code/`: one folder per stage, with numbered scripts and one master script per language. See `code/README.md`.
+- `code/`: one folder per stage, with numbered scripts and one master script per language, plus the two dashboards. See `code/README.md`.
 - `outputs/figures/`: charts. Made by code only.
 - `outputs/tables/`: tables (text, CSV, Excel). Made by code only.
 - `outputs/data/`: tidy data behind the results. Made by code only. Keep the columns fixed.
@@ -80,6 +89,7 @@ Sources and licences:
 
 - [`code/README.md`](code/README.md): how to run all the code, stage by stage.
 - [`code/00_data_prep/README.md`](code/00_data_prep/README.md): how the clean data are made.
+- [`code/py-shiny/README.md`](code/py-shiny/README.md) and [`code/r-shiny/README.md`](code/r-shiny/README.md): how to run the dashboards.
 - [`data/clean/README.md`](data/clean/README.md): every variable, its unit and its meaning.
 - [`data/raw/README.md`](data/raw/README.md): sources, links, versions, licences and citations.
 - [`AGENTS.md`](AGENTS.md): rules for AI assistants in this project.
@@ -101,6 +111,7 @@ The people and the Git history are made up for teaching. The Git history records
 
 Newest first. One entry per meaningful change or decision.
 
+- 2026-10-12, Amina: Added two dashboards, in Python (`code/py-shiny/`) and R (`code/r-shiny/`), with links to the online versions. Why: colleagues can compare blocs for any countries and years without running code.
 - 2026-10-09, Amina: Python and R may now use any package, if the README says how to install it. Environments only on request. Why: new work, such as dashboards, needs more than the agreed few packages, and everyone must still be able to run the code.
 - 2026-08-19, Amina: Added the MIT License with the World Bank IGO Rider, and a contact. Why: both are needed before the project is shared outside the team.
 - 2026-06-24, Amina: Grouped the code by language in `code/python/`, `code/r/` and `code/stata/`. Why: with data prep in its own folder and three languages, one flat `code/` folder was hard to scan.

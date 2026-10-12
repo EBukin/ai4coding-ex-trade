@@ -52,6 +52,7 @@ Where this project departs from the template, and why. Add a bullet only when th
 - 2026-03-09: clean data and outputs are committed to Git. Why: not everyone has R or Stata, and they still need to see every result.
 - 2026-03-09: data prep is a separate stage in `code/00_data_prep/`, and the master scripts do not run it. Why: it needs 600 MB of downloads; the analyses only need the clean files.
 - 2026-06-24: scripts are grouped by language in `code/python/`, `code/r/` and `code/stata/`. Why: with data prep in its own folder and three languages, one flat `code/` folder was hard to scan.
+- 2026-10-12: the dashboards are in `code/py-shiny/` and `code/r-shiny/`, and the master scripts do not run them. Why: a Shiny app is started by hand, not run in order, and its file must be called `app.py` or `app.R`.
 
 ## Code and packages
 

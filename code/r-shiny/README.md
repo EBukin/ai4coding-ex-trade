@@ -2,6 +2,7 @@
 
 A Shiny app that shows the three parts of the project for any choice of countries and years: the bloc charts, the PPML gravity model, the subsidy path model, and trade against distance.
 
+- Live version: <https://datanalytics.worldbank.org/ai4coding-ex2-3-r-shiny/>. It was deployed on 2026-10-12 from an earlier copy of the data with 27 countries, so its numbers differ from the files here.
 - The app reads `data/clean/` and writes nothing.
 
 ## Files
