@@ -42,13 +42,13 @@ HISTORY = BUILD / "history"
 OUT = BUILD / "out" / "farm-trade-support.zip"
 TOP = "farm-trade-support"
 # Fixed zip timestamp.
-STAMP = (2026, 8, 14, 12, 0, 0)
+STAMP = (2026, 8, 19, 12, 0, 0)
 BINARY = {".png", ".xlsx"}
 # Words that must never appear in a commit message (no AI attribution).
 BANNED = ["co-authored", "claude", "generated with", "chatgpt", "copilot"]
 # Identity and date for every git call, so nothing git writes on its own
 # (reflogs are off anyway) can fall back to the builder's name or clock.
-BUILDER = ("Build", "build@example.org", "2026-08-14T12:00:00+00:00")
+BUILDER = ("Build", "build@example.org", "2026-08-19T12:00:00+00:00")
 
 
 # ---- File contents ------------------------------------------------------------
@@ -123,79 +123,246 @@ if _rc {
 }
 
 """
-WHO_NAMED = """| Role | Name | Works on |
-|---|---|---|
-| Team lead | Amina Haddad | README, data, merges |
-| R analyst | Tomas Ferreira | Gravity model |
-| Stata analyst | Grace Owusu | Subsidy pass-through |
-| Python analyst | Mei Lin Tan | Bloc charts |
+
+
+def drop(s, *lines):
+    """Drop whole lines, each exactly once, or fail loudly."""
+    for line in lines:
+        s = cut(s, line + "\n")
+    return s
+
+
+def sections(s, *keep):
+    """Keep the text before the first '## ' heading and the named sections."""
+    head, *parts = s.split("\n## ")
+    kept = [p for p in parts if p.split("\n")[0] in keep]
+    if len(kept) != len(keep):
+        sys.exit(f"build_history: expected sections {keep}")
+    return "\n## ".join([head] + kept)
+
+
+def flat(s):
+    """Before 2026-06-24 every analysis script sat directly in code/."""
+    for lang in ("python", "r", "stata"):
+        s = s.replace(f"code/{lang}/", "code/")
+    return s
+
+
+def flat_code(rel):
+    return flat(text(rel))
+
+
+# README.md, newest version first. Each version is named after the commit
+# that writes it.
+
+def news(s, who):
+    """Drop the News entry that starts with `who`, for example '2026-06-24, Amina'."""
+    lines = [x for x in s.splitlines(keepends=True) if x.startswith(f"- {who}: ")]
+    if len(lines) != 1:
+        sys.exit(f"build_history: expected one News entry {who!r}")
+    return cut(s, lines[0])
+
+
+WHO_NAMED = """- Amina Haddad, team lead: README, data, merges.
+- Tomas Ferreira, R analyst: gravity model.
+- Grace Owusu, Stata analyst: subsidy pass-through.
+- Mei Lin Tan, Python analyst: bloc charts.
+
+The people and the Git history are made up for teaching. The Git history"""
+WHO_ROLES = """- Team lead: README, data, merges.
+- R analyst: gravity model.
+- Stata analyst: subsidy pass-through.
+- Python analyst: bloc charts.
+
+The Git history"""
+RUN_STUB = """## Getting started
+
+- Open this folder in Positron or VS Code.
+- Run everything from the project root, the folder that holds this README.
+- Each part gets a master script in `code/`: `00_master.py`, `00_master.R` and `00_master.do`.
+- Each analyst adds the run instructions for their part when their branch merges.
+
 """
-WHO_ROLES = """| Role | Works on |
-|---|---|
-| Team lead | README, data, merges |
-| R analyst | Gravity model |
-| Stata analyst | Subsidy pass-through |
-| Python analyst | Bloc charts |
-"""
-RUN_STUB = """## How to run
-
-Each part gets a master script in `code/`: `00_master.py`, `00_master.R` and `00_master.do`.
-Run it from the project root, the folder that holds this README.
-Each analyst adds the run instructions for their part when their branch merges.
+TIDY_STUB = """Each part will write a tidy file to `outputs/data/`. Their columns will stay fixed, so they could feed one dashboard later.
 
 """
 
 
-def readme_v5():
-    return cut(text("README.md"), WHO_NAMED, WHO_ROLES)
+def readme_m11():
+    s = cut_between(text("README.md"), "## Contact\n", "## News\n")
+    s = s[:s.index("\n## License\n") + 1]
+    return news(s, "2026-08-19, Amina")
 
 
-def readme_v4():
-    s = drop_rows(readme_v5(), "| Stata | ", 4)
-    s = cut(s, "- Stata 17 or later (optional)\n")
-    s = cut(s, "All outputs are committed. If you do not have Stata or R, "
-               "you can still see their results in `outputs/`.\n\n")
-    return cut(s, "run one, two or all three.", "run one or both.")
+def readme_m12():
+    return cut(readme_m11(), WHO_NAMED, WHO_ROLES)
 
 
-def readme_v3():
-    s = drop_rows(readme_v4(), "| Python | ", 5)
-    s = cut(s, "- Python with `pandas` and `matplotlib`\n")
-    return cut(s, "The parts are independent: run one or both.\n")
+def readme_g1():
+    s = news(readme_m12(), "2026-06-24, Amina")
+    s = cut(s, "5. `code/python/`, `code/r/`, `code/stata/`: the analyses read the clean files.",
+            "5. `code/`: the analysis scripts read the clean files.")
+    s = cut(s, "- `code/`: one folder per stage, with numbered scripts and one master "
+               "script per language.",
+            "- `code/`: numbered scripts and one master script per language. Data "
+            "prep has its own folder, `code/00_data_prep/`.")
+    return flat(s)
 
 
-def readme_v2():
-    s = cut_between(readme_v3(), "## How to run\n", "## Folder map\n", RUN_STUB)
-    return cut_between(s, "## Outputs\n", "## Data sources\n")
+def readme_m9():
+    return news(readme_g1(), "2026-06-16, Grace")
 
 
-def code_readme(*parts):
-    head, *sections = text("code/README.md").split("\n## ")
-    keep = [x for x in sections if x.split(":")[0] in parts]
-    assert len(keep) == len(parts)
-    return "\n## ".join([head] + keep)
+def readme_m8():
+    return news(readme_m9(), "2026-06-03, Amina")
 
 
-def raw_readme_v1():
-    s = cut(text("data/raw/README.md"), ", and the country size used to simulate\n"
-            "  `farm_support.csv`.", ".")
-    return cut(s, "\n## Synthetic data\n\n`farm_support.csv` is simulated, not "
-               "downloaded. See `../clean/README.md`.\n")
+def readme_m7():
+    s = drop(readme_m8(), "- Stata 17 or later (optional)",
+             "- Stata: in Stata, `cd` to the project root, then `do code/00_master.do`",
+             "- `sem_effects.csv`: `effect`, `path`, `estimate`, `std_error`")
+    s = cut(s, "All outputs are committed. If you do not have R or Stata, you can "
+               "still see their results in `outputs/`.\n\n")
+    s = cut(s, "run one, two or all three.", "run one or both.")
+    return news(s, "2026-05-12, Grace")
 
 
-def clean_readme_v2():
-    return cut(text("data/clean/README.md"), " FAOSTAT values are in thousand US "
-               "dollars; they\nare multiplied by 1,000 here.")
+def readme_m6():
+    s = drop(readme_m7(),
+             "- Python with `pandas` and `matplotlib`: `pip install pandas matplotlib`",
+             "- Python: `python code/00_master.py`",
+             "- The parts are independent: run one or both.",
+             "- `bloc_trade.csv`: `year`, `bloc_from`, `bloc_to`, `trade_usd`")
+    s = cut_between(s, "![Farm trade between blocs", "## Purpose and why\n")
+    return news(s, "2026-04-29, Mei")
 
 
-def clean_readme_v1():
-    s = cut_between(clean_readme_v2(), "## `farm_support.csv` (SYNTHETIC)\n",
+def readme_f1():
+    s = cut_between(readme_m6(), "## Getting started\n", "## What's inside\n", RUN_STUB)
+    s = cut_between(s, "Each part writes a tidy file", "## Data provenance\n", TIDY_STUB)
+    return news(s, "2026-04-20, Tomas")
+
+
+def readme_m5():
+    return news(readme_f1(), "2026-04-06, Amina")
+
+
+# AGENTS.md and code/README.md
+
+def agents_m9():
+    return drop(text("AGENTS.md"),
+                "- 2026-06-24: scripts are grouped by language in `code/python/`, "
+                "`code/r/` and `code/stata/`. Why: with data prep in its own folder "
+                "and three languages, one flat `code/` folder was hard to scan.")
+
+
+def agents_m5():
+    return sections(agents_m9(), "How to talk", "Your role: partner, tutor and peer",
+                    "Documenting changes (News)", "Project template",
+                    "Structure decisions")
+
+
+def code_readme_m8():
+    s = text("code/README.md")
+    for folder, name in (("python", "Python"), ("r", "R"), ("stata", "Stata")):
+        s = cut(s, f"\n- `{folder}/`: ", f"\n- {name}: ")
+        s = cut(s, f"\n## `{folder}/`: ", f"\n## {name}: ")
+    return flat(s)
+
+
+def code_readme_m7():
+    s = drop(code_readme_m8(), "- Stata: subsidy pass-through.")
+    s = cut(s, "The analysis stages are independent: run one, two or all three, "
+               "in any order. Each reads", "Each analysis stage reads")
+    return sections(s, "Stages, in run order", "`00_data_prep/`: data preparation (optional)",
+                    "Python: who trades with whom", "R: gravity model of farm trade")
+
+
+def code_readme_m6():
+    s = drop(code_readme_m7(), "- Python: who trades with whom.")
+    return sections(s, "Stages, in run order", "`00_data_prep/`: data preparation (optional)",
+                    "R: gravity model of farm trade")
+
+
+# Data prep and the data READMEs. prepare_data.py writes the data READMEs,
+# so its templates are cut with the same strings as the READMEs.
+
+X1000_DOC = ("- FAOSTAT values are in thousand US dollars. The script multiplies "
+             "them by 1,000, so `trade_usd` is in US dollars.\n")
+SIM_RAW = ", and the country size used to simulate `farm_support.csv`"
+SIM_RAW_SECTION = ("\n## Synthetic data\n\n- `farm_support.csv` is simulated, not "
+                   "downloaded. See [`../clean/README.md`](../clean/README.md).\n")
+SIM_SOURCE = "- `farm_support.csv` is synthetic. It has no source.\n"
+
+
+def clean_readme_m4():
+    return cut(text("data/clean/README.md"), X1000_DOC)
+
+
+def clean_readme_m3():
+    s = cut_between(clean_readme_m4(), "## `farm_support.csv` (SYNTHETIC)\n",
                     "## Sources and licences\n")
-    return cut(s, "- `farm_support.csv` is synthetic. It has no source.\n")
+    return cut(s, SIM_SOURCE)
 
 
-def gravity_v3():
-    s = cut(text("code/01_gravity.R"),
+def raw_readme_m3():
+    return cut(cut(text("data/raw/README.md"), SIM_RAW), SIM_RAW_SECTION)
+
+
+def raw_readme_m2():
+    """Written before the prep script existed and before .gitignore changed."""
+    s = cut(raw_readme_m3(), " Git ignores everything in this folder except this README.")
+    s = drop(s, "- `code/00_data_prep/prepare_data.py` downloads them here, then cuts "
+                "them down to our 46 countries and 2000-2019. See "
+                "[`../../code/00_data_prep/README.md`](../../code/00_data_prep/README.md).",
+             "- You do not need to run it: the clean data in `../clean/` are already made.")
+    return cut_between(s, "## Files the script writes here\n", "## FAOSTAT")
+
+
+def prepare_m4():
+    s = cut(text("code/00_data_prep/prepare_data.py"),
+            "    # FAOSTAT values are in thousand USD: multiply by 1,000 to get USD.\n"
+            "    value = value * 1000\n")
+    return cut(s, X1000_DOC)
+
+
+def prepare_m3():
+    s = cut_between(prepare_m4(), "# ---- Stage: simulate farm_support.csv",
+                    "# ---- Stage: write the data READMEs")
+    s = drop(s, "    simulate_support  data/clean/farm_support.csv (SYNTHETIC)",
+             "    clean += support_readme(n_support)",
+             "    support = simulate_support(trade)",
+             '    write_csv(support, "farm_support.csv")')
+    s = cut(s, "def write_readmes(stats, n_trade, n_support):",
+            "def write_readmes(stats, n_trade):")
+    s = cut(s, "write_readmes(stats, len(trade), len(support))",
+            "write_readmes(stats, len(trade))")
+    return cut(cut(cut(s, SIM_RAW), SIM_RAW_SECTION), SIM_SOURCE)
+
+
+PREP_UNITS = """- FAOSTAT reports trade values in thousand US dollars.
+- `build_trade` multiplies them by 1,000, so `trade_usd` in `farm_trade.csv` is in US dollars.
+- CEPII reports GDP in thousand US dollars too. `build_trade` also multiplies GDP by 1,000.
+"""
+
+
+def prep_readme_m4():
+    return cut(text("code/00_data_prep/README.md"), PREP_UNITS,
+               "- CEPII reports GDP in thousand US dollars. `build_trade` multiplies "
+               "GDP by 1,000.\n")
+
+
+def prep_readme_m3():
+    s = drop(prep_readme_m4(), "- It also makes the synthetic subsidy data for the Stata part.",
+             "6. `simulate_support`: makes the synthetic `data/clean/farm_support.csv`.")
+    s = cut(s, "7. `write_readmes`", "6. `write_readmes`")
+    return cut_between(s, "## The synthetic subsidy data\n", "## How to run\n")
+
+
+# Scripts
+
+def gravity_r3():
+    s = cut(text("code/r/01_gravity.R"),
             "\n# Country-pair identifier (direction matters: USA->CAN differs from "
             "CAN->USA)\ntrade$pair <- paste(trade$exporter, trade$importer, sep = \"_\")\n")
     s = cut(s, "# Errors are clustered by country pair: flows of one pair are "
@@ -204,36 +371,57 @@ def gravity_v3():
     return cut(s, "  data = trade,\n  cluster = ~ pair\n)", "  data = trade\n)")
 
 
-def sem_v2(number):
-    s = cut(text("code/03_sem.do"), GUARD_SEM)
+def sem_s3(number):
+    s = cut(flat_code("code/stata/03_sem.do"), GUARD_SEM)
     return s if number == "03" else cut(s, "* 03_sem.do:", "* 02_sem.do:")
 
 
 DERIVE = {
     "empty": lambda: "",
-    "raw_readme_v1": raw_readme_v1,
-    "clean_readme_v1": clean_readme_v1,
-    "clean_readme_v2": clean_readme_v2,
-    "gitignore_v2": lambda: cut(text(".gitignore"), "# Stata\n*.log\n*.smcl\n\n"),
-    "farm_trade_v1": lambda: thousands(final("data/clean/farm_trade.csv"), "trade_usd"),
-    "bloc_trade_v1": lambda: thousands(final("outputs/data/bloc_trade.csv"), "trade_usd"),
-    "readme_v2": readme_v2,
-    "readme_v3": readme_v3,
-    "readme_v4": readme_v4,
-    "readme_v5": readme_v5,
-    "code_readme_v2": lambda: code_readme("R"),
-    "code_readme_v3": lambda: code_readme("Python", "R"),
-    "gravity_v3": gravity_v3,
-    "sem_v2_as_02": lambda: sem_v2("02"),
-    "sem_v2_as_03": lambda: sem_v2("03"),
-    "figure_v1": lambda: cut(text("code/02_figure.do"), GUARD_FIG),
-    "master_do_v3": lambda: cut(text("code/00_master.do"), ROOT_CHECK),
+    "gitignore_m3": lambda: cut(text(".gitignore"), "# Stata\n*.log\n*.smcl\n\n"),
+    "farm_trade_m3": lambda: thousands(final("data/clean/farm_trade.csv"), "trade_usd"),
+    "bloc_trade_p3": lambda: thousands(final("outputs/data/bloc_trade.csv"), "trade_usd"),
+    "raw_readme_m2": raw_readme_m2,
+    "raw_readme_m3": raw_readme_m3,
+    "clean_readme_m3": clean_readme_m3,
+    "clean_readme_m4": clean_readme_m4,
+    "prepare_m3": prepare_m3,
+    "prepare_m4": prepare_m4,
+    "prep_readme_m3": prep_readme_m3,
+    "prep_readme_m4": prep_readme_m4,
+    "readme_m5": readme_m5,
+    "readme_f1": readme_f1,
+    "readme_m6": readme_m6,
+    "readme_m7": readme_m7,
+    "readme_m8": readme_m8,
+    "readme_m9": readme_m9,
+    "readme_g1": readme_g1,
+    "readme_m12": readme_m12,
+    "readme_m11": readme_m11,
+    "agents_m5": agents_m5,
+    "agents_m9": agents_m9,
+    "code_readme_m6": code_readme_m6,
+    "code_readme_m7": code_readme_m7,
+    "code_readme_m8": code_readme_m8,
+    "gravity_r3": gravity_r3,
+    "sem_s3": lambda: sem_s3("02"),
+    "sem_s4": lambda: sem_s3("03"),
+    "figure_s4": lambda: cut(flat_code("code/stata/02_figure.do"), GUARD_FIG),
+    "master_do_s4": lambda: cut(flat_code("code/stata/00_master.do"), ROOT_CHECK),
+    "master_py_p6": lambda: flat_code("code/python/00_master.py"),
+    "master_r_r5": lambda: flat_code("code/r/00_master.R"),
+    "prepare_do_s5": lambda: flat_code("code/stata/01_prepare.do"),
+    "figure_s5": lambda: flat_code("code/stata/02_figure.do"),
+    "sem_s5": lambda: flat_code("code/stata/03_sem.do"),
+    "master_do_g1": lambda: flat_code("code/stata/00_master.do"),
 }
 
 
 def content(path, source):
     if source == "project":
         return final(path)
+    if source.startswith("project:"):
+        return final(source.removeprefix("project:"))
     if source.startswith("files/"):
         return read(HISTORY / source)
     data = DERIVE[source.removeprefix("derive:")]()
@@ -443,8 +631,10 @@ def scrub(repo):
 
 EMAIL = re.compile(rb"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
 # Public addresses the project files cite on purpose: the World Bank template
-# README names the Open Source Program Office.
+# README names the Open Source Program Office, and the README gives a contact
+# (CONTACT_EMAIL in the spec, added in main()).
 PUBLIC_EMAILS = {b"github@worldbank.org"}
+PLACEHOLDER_EMAIL = "contact@worldbank.org"
 
 
 def leak_check(repo, env):
@@ -525,6 +715,12 @@ def main():
                     help="also write _build/out/farm-trade-support.zip")
     args = ap.parse_args()
     spec = runpy.run_path(str(HISTORY / "commits.py"))
+    contact = spec["CONTACT_EMAIL"]
+    if f"<{contact}>" not in text("README.md"):
+        sys.exit(f"build_history: README.md does not give the contact {contact}")
+    if contact == PLACEHOLDER_EMAIL:
+        print("build_history: WARNING: Contact email is still the placeholder.")
+    PUBLIC_EMAILS.add(contact.encode())
     commits, heads = replay(spec)
     tmp = Path(tempfile.mkdtemp(prefix="farm-trade-history-"))
     try:
