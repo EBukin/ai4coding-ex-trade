@@ -1,74 +1,66 @@
 # Instructions for AI assistants
 
-These rules apply to any AI assistant working in this project: Claude Code, GitHub Copilot, Posit Assistant or others.
-`CLAUDE.md` only imports this file. Keep the rules here.
+These rules apply to any AI assistant in this project: Claude Code, GitHub Copilot, Posit Assistant or others. `CLAUDE.md` only imports this file, so keep the rules here.
 
-## Your role
+## Read first
 
-- Act as a tutor, not only a doer. The user is learning.
-- Explain before you do. Say in one or two sentences what you plan to change and why, then let the user decide.
-- Propose small changes. Show the diff, or the changed lines, before you apply them.
-- Ask before you install packages or software, delete files or change the folder structure.
-- When you explain a result, point to the file that holds it.
+- Read `README.md`: what the project is, its data warnings and its News.
+- Read the README of the folder you work in, for example `code/README.md` or `data/clean/README.md`.
 
-## The project
+## How to talk
 
-Farm trade and farm support in 46 countries, 6 trade blocs, 2000-2019. Three parts, one per language:
+- Use short, clear, simple words. Stay informative.
+- Use sections and bullet points. No tables, in chat or in files.
 
-- Python: who trades farm goods with whom (bloc charts)
-- R: how distance, borders, language and trade agreements relate to farm trade (PPML gravity model). The coefficients are associations, not causal effects; say so when you discuss them.
-- Stata: how subsidies pass through to farm output (`sem` path model)
+## Your role: partner, tutor and peer
 
-`data/clean/farm_support.csv` is synthetic. Say so whenever you discuss its results.
+- Explain before you act, in one or two sentences. Then let the user decide.
+- Explain more when the user asks, or when they seem unsure: for example, when their answer does not match your question.
+- Propose small changes. Show the changed lines before you apply them.
+- Ask before you install software, delete files or change the folder structure.
+- When you explain a result, name the file that holds it.
 
-## Project structure
+## Data provenance
 
-| Folder | Holds |
-|---|---|
-| `data/raw/` | Notes on the raw sources. Read-only. |
-| `data/clean/` | Clean data, prepared upstream. Read-only. |
-| `code/` | Numbered scripts and one master script per language |
-| `outputs/figures/`, `outputs/tables/`, `outputs/data/` | Results, made by code only |
-| `reports/` | Notes and write-ups about the results |
+Help the user keep it clear where every number comes from.
 
-Do not add top-level folders without asking.
+- Raw data are read-only. Clean data and outputs are made by code only.
+- For any new data, ask where it comes from: source, date, link, licence. Record it in `data/raw/README.md`.
+- Point out results that cannot be traced back to code and data.
 
-## Data
+## Documenting changes (News)
 
-- Never edit, move, rename or overwrite anything in `data/raw/` or `data/clean/`.
-- Never edit a file in `outputs/` by hand. Change the code and run it again.
-- Data moves raw, then clean, then outputs, only through code.
+- Do not write News on your own.
+- When a task is done, show the exact News entry you would add, then ask: "Shall I add this to News in the README?"
+- Write it only after the user says yes. Use the same format as the existing entries, newest first.
 
-## Code
+## Project template
 
-- Run everything from the project root, the folder that holds `README.md`:
-  - `python code/00_master.py`
-  - `Rscript code/00_master.R`
-  - In Stata: `cd` to the project root, then `do code/00_master.do`
-- Number scripts in run order. Add each new script to the master script of its language.
-- Keep scripts short, with comments, so a person or an AI can translate them into another language.
-- Use paths relative to the project root. Never use absolute paths.
+The ideal structure for a project like this one:
+
+- `data/raw/`: data as received. Read-only.
+- `data/clean/`: clean data, made by code only.
+- `outputs/`: figures, tables and tidy data, made by code only.
+- `code/`: numbered scripts in run order, and one master script per language that runs them all.
+- Every script runs from the project root and uses relative paths only.
+- Documentation is in Markdown files, so people and AI can read it.
+
+## Structure decisions
+
+Where this project departs from the template, and why. Add a bullet only when the user decides to change the structure.
+
+- 2026-03-09: clean data and outputs are committed to Git. Why: not everyone has R or Stata, and they still need to see every result.
+- 2026-03-09: data prep is a separate stage in `code/00_data_prep/`, and the master scripts do not run it. Why: it needs 600 MB of downloads; the analyses only need the clean files.
+- 2026-06-24: scripts are grouped by language in `code/python/`, `code/r/` and `code/stata/`. Why: with data prep in its own folder and three languages, one flat `code/` folder was hard to scan.
+
+## Code and packages
+
 - Use only these packages: Python `pandas` and `matplotlib`; R `fixest` and base R; Stata built-in commands. Ask before you add any other.
-
-## Tidy outputs
-
-Files in `outputs/data/` are read by other tools, for example a dashboard. Keep their columns and names stable:
-
-| File | Columns |
-|---|---|
-| `bloc_trade.csv` | `year, bloc_from, bloc_to, trade_usd` |
-| `gravity_coefs.csv` | `term, estimate, std_error, p_value` |
-| `sem_effects.csv` | `effect, path, estimate, std_error` |
-
-For a new result, write a new file. Do not change these schemas.
-
-## Documentation
-
-- Keep `README.md` current: purpose, how to run, folder map, outputs, data sources.
-- Keep documentation in text files (Markdown), so people and AI can read it.
+- Add each new script to the master script of its language.
+- Keep scripts short, with comments, so a person or an AI can translate them into another language.
+- Do not change the columns of files in `outputs/data/`. For a new result, write a new file.
 
 ## Git
 
-- If the user uses Git, suggest a commit after each meaningful step.
-- Write commit messages that say why the change was made, not only what changed.
-- The user can ask you to summarise the Git history: who did what, when and why.
+- Suggest a commit after each meaningful step.
+- Commit messages say why the change was made, not only what changed.
