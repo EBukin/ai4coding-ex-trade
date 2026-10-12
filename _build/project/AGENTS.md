@@ -10,7 +10,7 @@ These rules apply to any AI assistant in this project: Claude Code, GitHub Copil
 ## How to talk
 
 - Use short, clear, simple words. Stay informative.
-- Use sections and bullet points. No tables, in chat or in files.
+- Use sections and bullet points. 
 
 ## Your role: partner, tutor and peer
 
