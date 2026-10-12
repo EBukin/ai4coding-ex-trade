@@ -1,0 +1,37 @@
+bloc_from,bloc_to,usd_bn_2000,usd_bn_2019,growth_pct
+EU,EU,76.71,218.97,185.5
+USMCA,USMCA,30.35,99.53,227.9
+USMCA,East Asia,22.62,46.9,107.3
+Mercosur,East Asia,2.65,43.87,1555.5
+ASEAN,East Asia,5.76,32.64,466.7
+EU,USMCA,9.99,27.62,176.5
+Oceania,East Asia,6.39,27.1,324.1
+EU,East Asia,5.39,27.04,401.7
+ASEAN,ASEAN,4.5,22.89,408.7
+ASEAN,USMCA,3.87,16.01,313.7
+Mercosur,EU,8.26,15.73,90.4
+USMCA,ASEAN,3.41,15.61,357.8
+East Asia,East Asia,6.79,13.39,97.2
+USMCA,EU,7.06,12.87,82.3
+Mercosur,ASEAN,0.85,12.85,1411.8
+ASEAN,EU,4.07,11.65,186.2
+East Asia,ASEAN,2.29,10.89,375.5
+Oceania,ASEAN,3.42,9.07,165.2
+Mercosur,Mercosur,4.01,8.28,106.5
+EU,ASEAN,1.68,7.83,366.1
+Mercosur,USMCA,2.7,6.88,154.8
+East Asia,USMCA,1.63,6.69,310.4
+Oceania,USMCA,3.36,6.66,98.2
+East Asia,EU,1.77,5.67,220.3
+Oceania,Oceania,1.0,4.09,309.0
+EU,Oceania,0.66,3.73,465.2
+ASEAN,Oceania,0.52,3.48,569.2
+USMCA,Oceania,0.69,2.98,331.9
+Oceania,EU,2.19,2.7,23.3
+EU,Mercosur,0.62,1.72,177.4
+East Asia,Oceania,0.19,1.39,631.6
+USMCA,Mercosur,0.54,1.25,131.5
+ASEAN,Mercosur,0.23,0.78,239.1
+Mercosur,Oceania,0.26,0.78,200.0
+East Asia,Mercosur,0.05,0.46,820.0
+Oceania,Mercosur,0.04,0.06,50.0

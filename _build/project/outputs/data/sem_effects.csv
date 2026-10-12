@@ -1,0 +1,7 @@
+effect,path,estimate,std_error
+direct,subsidy -> output,0.104736,0.007519
+indirect,subsidy -> output,0.237692,0.008035
+total,subsidy -> output,0.342428,0.004732
+direct,subsidy -> fertiliser,0.617368,0.010131
+total,subsidy -> fertiliser,0.617368,0.010131
+direct,fertiliser -> output,0.385009,0.011379

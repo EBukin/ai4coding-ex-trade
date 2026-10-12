@@ -1,0 +1,23 @@
+# Clean data and outputs are committed in this project,
+# so people without R or Stata still see every result.
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+renv/library/
+
+# Python
+__pycache__/
+.venv/
+
+# Stata
+*.log
+*.smcl
+
+# Office lock files
+~$*
+
+# OS
+.DS_Store
+Thumbs.db

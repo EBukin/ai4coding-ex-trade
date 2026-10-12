@@ -1,0 +1,20 @@
+# Raw downloads: over 600 MB, rebuilt by _build/make_data.py.
+# Only the two filtered extracts are committed, so the clean data can be
+# rebuilt without downloading again.
+/_build/raw/*
+!/_build/raw/fao_tm_filtered.csv
+!/_build/raw/gravity_filtered.csv
+
+# Build output
+/_build/out/
+*.zip
+
+# Python, R, Stata, OS
+__pycache__/
+.Rhistory
+.RData
+*.log
+*.smcl
+~$*
+.DS_Store
+Thumbs.db

@@ -1,0 +1,55 @@
+---
+title: "Agentic coding exercises"
+subtitle: "Practice coding with an IDE and an AI assistant: exercise 1 takes 45 minutes, more are coming"
+lesson: "2.1"
+kind: [reading]
+duration: 5
+---
+
+## How it works
+
+- **Start with exercise 1.** It takes about 45 minutes. Exercises 2 and 3 build on it and are coming soon.
+- **Work in your IDE.** Positron or VS Code, with Posit Assistant, Claude Code or Copilot Chat. See [Agentic coding](../agentic/agentic.qmd) for the setup.
+- **Use any language you have.** The project mixes R, Python and Stata. Python alone is enough; the AI can explain or rewrite the other parts.
+- **Copy each prompt** with the copy button, one at a time, and check the answer against "What you should see".
+- **Use only the files provided.** Do not upload confidential material to a tool your organization has not approved.
+
+## Choose an exercise
+
+:::: {.ix-grid}
+
+::: {.ix-card .ai4c-card}
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+[Exercise 1 · R, Python, Stata · 45 min]{.ix-meta}
+
+[Explore a three-language project with AI](explore-project.qmd){.ix-title .stretched-link}
+
+A finished project on farm trade and farm support, with code in three languages and a Git history.
+Make the AI explain it and run it, then fix a chart and add a new result.
+
+[Start: one project folder (.zip) →]{.ix-foot}
+:::
+
+::: {.ix-card .ai4c-card .is-todo}
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+[Exercise 2 · coming soon]{.ix-meta}
+
+[Set up your own project with AI]{.ix-title}
+
+Start a new project from the course template and let the AI set up its folders, instructions file and first script.
+
+[Not yet available]{.ix-foot}
+:::
+
+::: {.ix-card .ai4c-card .is-todo}
+<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+[Exercise 3 · coming soon]{.ix-meta}
+
+[A simple dashboard]{.ix-title}
+
+Turn the results of exercise 1 into a small dashboard in R or Python, where you filter and plot the data.
+
+[Not yet available]{.ix-foot}
+:::
+
+::::
