@@ -1,23 +1,25 @@
-"""Build the farm-trade-support download for agentic exercise 1.
+"""Build the farm-trade-support history for agentic exercise 1.
 
 Replays the commit spec in _build/history/commits.py into a fresh Git
 repository in a temporary folder, checks that the final `main` tree equals
-_build/project/, and zips the project with its .git folder into
-lessons/agentic-exercises/files/farm-trade-support.zip.
+_build/project/, then fetches `main` and the feature branches into this
+repository. The `dev` branch, which holds this script, is never touched and
+shares no commits with them. With --zip, it also writes the project with its
+.git folder to _build/out/farm-trade-support.zip (git-ignored).
 
-The course repository never holds a nested .git folder: the repository is
-built in the system temp folder and only the zip is written here. The zip is
-git-ignored. Runs as a Quarto pre-render script, on Windows and in Linux CI.
-Needs Python (standard library only) and the git command line.
+Runs on Windows and Linux. Needs Python (standard library only) and the git
+command line.
 
 Determinism: identities, dates and messages come from the spec, and user and
 system Git config are ignored, so the same input gives the same commit
 hashes on every machine.
 
-Run by hand from the repository root:
-    python lessons/agentic-exercises/_build/build_history.py
+Run from the repository root, on the dev branch:
+    python _build/build_history.py          # update main and the branches
+    python _build/build_history.py --zip    # also write the zip
 """
 
+import argparse
 import difflib
 import getpass
 import hashlib
@@ -34,12 +36,12 @@ from datetime import datetime
 from pathlib import Path
 
 BUILD = Path(__file__).resolve().parent
-ROOT = BUILD.parents[2]
+ROOT = BUILD.parent
 PROJECT = BUILD / "project"
 HISTORY = BUILD / "history"
-OUT = BUILD.parent / "files" / "farm-trade-support.zip"
+OUT = BUILD / "out" / "farm-trade-support.zip"
 TOP = "farm-trade-support"
-# Fixed zip timestamp, as in scripts/build_template_zip.py.
+# Fixed zip timestamp.
 STAMP = (2026, 8, 14, 12, 0, 0)
 BINARY = {".png", ".xlsx"}
 # Words that must never appear in a commit message (no AI attribution).
@@ -502,7 +504,26 @@ def remove_readonly(func, path, _):
     func(path)
 
 
+def publish(repo, heads):
+    """Fetch the built branches into this repository, replacing them."""
+    if "dev" in heads:
+        sys.exit("build_history: the spec must not use the branch name dev")
+    current = subprocess.run(["git", "-C", str(ROOT), "branch", "--show-current"],
+                             capture_output=True, text=True).stdout.strip()
+    if current in heads:
+        sys.exit(f"build_history: check out dev first (now on {current})")
+    refspecs = [f"+refs/heads/{b}:refs/heads/{b}" for b in sorted(heads)]
+    r = subprocess.run(["git", "-C", str(ROOT), "fetch", "--quiet", "--no-tags",
+                        str(repo), *refspecs], capture_output=True, text=True)
+    if r.returncode:
+        sys.exit(f"build_history: fetch into {ROOT} failed:\n{r.stderr}")
+
+
 def main():
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--zip", action="store_true",
+                    help="also write _build/out/farm-trade-support.zip")
+    args = ap.parse_args()
     spec = runpy.run_path(str(HISTORY / "commits.py"))
     commits, heads = replay(spec)
     tmp = Path(tempfile.mkdtemp(prefix="farm-trade-history-"))
@@ -519,7 +540,9 @@ def main():
         leak_check(repo, env)
         if git(repo, env, "status", "--porcelain", "--untracked-files=all"):
             sys.exit("build_history: working tree is not clean after checkout")
-        zip_repo(repo)
+        if args.zip:
+            zip_repo(repo)
+        publish(repo, heads)
         head = git(repo, env, "rev-parse", "main").decode().strip()
     finally:
         if sys.version_info >= (3, 12):
@@ -527,8 +550,10 @@ def main():
         else:
             shutil.rmtree(tmp, onerror=remove_readonly)
     merges = sum(len(c["parents"]) > 1 for c in commits)
-    print(f"wrote {OUT.relative_to(ROOT).as_posix()}: {len(commits)} commits, "
-          f"{merges} merges, {len(heads)} branches, main {head[:12]}")
+    print(f"updated {len(heads)} branches ({', '.join(sorted(heads))}): "
+          f"{len(commits)} commits, {merges} merges, main {head[:12]}")
+    if args.zip:
+        print(f"wrote {OUT.relative_to(ROOT).as_posix()}")
 
 
 if __name__ == "__main__":

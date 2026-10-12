@@ -11,10 +11,10 @@ Reads raw downloads in _build/raw/ (downloads them if missing) and writes:
     _build/project/data/clean/README.md
     _build/project/data/raw/README.md
 
-Run from anywhere:
+Run from the repository root:
 
-    C:\\WBG\\Python313\\python lessons/agentic-exercises/_build/make_data.py
-    ... make_data.py --refresh     # rebuild the filtered caches from the zips
+    python _build/make_data.py
+    python _build/make_data.py --refresh   # rebuild the filtered caches from the zips
 
 Deterministic: fixed seed, sorted rows, integer or fixed-decimal output.
 Rerunning gives byte-identical files. Uses pandas, numpy and stdlib only.

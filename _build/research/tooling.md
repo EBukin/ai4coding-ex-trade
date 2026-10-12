@@ -9,7 +9,7 @@ Date: 2026-10-11. Plan: `.docs/plans/0018-agentic-exercise-1-build.md`, step A2.
 - VS Code added local file history to the Timeline view in 1.66. Each save adds an entry; entries can be compared and restored. Setting `workbench.localHistory.enabled` (default `true`), plus `maxFileSize`, `maxFileEntries` (50), `exclude`, `mergeWindow`. Source: <https://code.visualstudio.com/updates/v1_66>
 - UI path, VS Code: Explorer view (`Ctrl+Shift+E`), expand the **Timeline** section at the bottom. It shows events for the file active in the editor: Git commits and local file saves. Source: <https://code.visualstudio.com/docs/sourcecontrol/history>
 - UI path, Positron: same. Explorer > Timeline. Positron docs have no page on it, and no Positron GitHub issue reports it missing (`gh search issues --repo posit-dev/positron "local history"` / `"timeline"`: nothing relevant).
-- Local evidence: this machine runs Positron 2026.08.0 (Code OSS 1.124.0, `product.json`). `%APPDATA%\Positron\User\History\` holds 912 file histories, including `entries.json` with `"source":"Chat Edit: ..."` entries. Assistant edits are recorded too.
+- Tested in Positron 2026.08.0 (Code OSS 1.124.0): the local history folder holds `entries.json` with `"source":"Chat Edit: ..."` entries. Assistant edits are recorded too.
 - Caveats for the page: only edits made inside the IDE are tracked. One entry per save (merged within 10 s). Learner must open a file first, then expand Timeline. Filter icon in Timeline toggles "Local History" vs "Git History".
 
 ## 2. Which assistants read `AGENTS.md`
