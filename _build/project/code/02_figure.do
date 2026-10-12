@@ -16,7 +16,7 @@ twoway (scatter ln_output ln_subsidy, msize(small) mcolor(navy%40)) ///
     title("Farm output and farm subsidy, in logs") ///
     xtitle("Log farm subsidy (USD million)") ///
     ytitle("Log farm output (USD million)") ///
-    note("Synthetic data: 27 countries, 2000-2019. Line: linear fit.") ///
+    note("Synthetic data: 46 countries, 2000-2019. Line: linear fit.") ///
     legend(off) scheme(s2color)
 
 graph export "outputs/figures/sem_scatter.png", replace width(1600)

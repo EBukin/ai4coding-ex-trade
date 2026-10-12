@@ -66,7 +66,7 @@ clean data later, and we cite the sources correctly from the start.
     {
         "id": "M3", "branch": "main", "author": "amina",
         "date": "2026-03-09T10:22:31+01:00",
-        "message": """Add clean farm trade data for 27 countries in 6 blocs
+        "message": """Add clean farm trade data for 46 countries in 6 blocs
 
 One row per exporter, importer and year, 2000-2019, with the CEPII
 gravity variables joined on. Everyone works from the same panel instead
@@ -105,7 +105,7 @@ full country panel.
         "date": "2026-03-11T11:15:20+01:00",
         "message": """Add synthetic farm support data for the Stata part
 
-We have no comparable subsidy data for all 27 countries yet. A simulated
+We have no comparable subsidy data for all 46 countries yet. A simulated
 panel with known elasticities (direct 0.10, indirect 0.24, total 0.34)
 lets Grace build and test the path model now, and check that sem
 recovers the true values. The file is flagged as synthetic in
@@ -281,7 +281,7 @@ Picks up the trade unit fix, so the bloc totals come out in US dollars.
         "message": """Cluster standard errors by country pair
 
 Grace reviewed the table and pointed out that the t-statistics were in
-the hundreds. Flows of one pair are correlated over time, so the default
+the tens of thousands. Flows of one pair are correlated over time, so the default
 IID standard errors are far too small. Clustering by pair gives honest
 uncertainty; the coefficients do not change.
 """,
@@ -442,8 +442,8 @@ country from the model.
         "date": "2026-05-07T10:48:03-04:00",
         "message": """commit Stata outputs
 
-sem gets the true elasticities back within 0.01 (direct 0.105, indirect
-0.238, total 0.342). Committed so people without Stata can see them.
+sem gets the true elasticities back within 0.015 (direct 0.103, indirect
+0.228, total 0.331). Committed so people without Stata can see them.
 """,
         "files": {
             "outputs/tables/sem_elasticities.xlsx": "project",

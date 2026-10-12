@@ -2,7 +2,7 @@
 
 ## Purpose and why
 
-This project looks at farm trade and farm support in 27 countries, grouped in 6 trade blocs, from 2000 to 2019.
+This project looks at farm trade and farm support in 46 countries, grouped in 6 trade blocs, from 2000 to 2019.
 Each part of the story uses a different language, so the team can work in the tool each analyst knows best.
 
 | Part | Question | Language | Data |

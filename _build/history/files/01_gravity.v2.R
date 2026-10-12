@@ -43,7 +43,7 @@ tab <- etable(model, digits = 3, se.below = TRUE, headers = "PPML")
 
 # etable returns a data frame; print it to a text file with a title
 con <- lf_file("outputs/tables/gravity.txt")
-writeLines(c("Gravity model of farm trade, 27 countries, 2000-2019", "",
+writeLines(c("Gravity model of farm trade, 46 countries, 2000-2019", "",
              capture.output(print(tab))), con)
 close(con)
 

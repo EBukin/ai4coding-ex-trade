@@ -2,6 +2,12 @@
 
 Date: 2026-10-11. Status: tested end to end on this machine.
 
+**Update 2026-10-12:** the panel now has 46 countries (list in
+`_build/make_data.py`): 41,400 rows, 12% zeros. PPML with clustered SE:
+log(dist) -0.63, contig +0.73, comlang -0.06 (n.s.), rta +0.60. Romania and
+Papua New Guinea were dropped for missing CEPII GDP. The trial below is for
+the first 27 countries.
+
 ## Decision
 
 Use **real farm trade**: FAOSTAT Detailed Trade Matrix (TM), summed over all items, joined to CEPII Gravity V202211. No fallback needed.

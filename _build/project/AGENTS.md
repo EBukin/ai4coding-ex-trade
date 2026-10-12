@@ -13,7 +13,7 @@ These rules apply to any AI assistant working in this project: Claude Code, GitH
 
 ## The project
 
-Farm trade and farm support in 27 countries, 6 trade blocs, 2000-2019. Three parts, one per language:
+Farm trade and farm support in 46 countries, 6 trade blocs, 2000-2019. Three parts, one per language:
 
 - Python: who trades farm goods with whom (bloc charts)
 - R: how distance, borders, language and trade agreements relate to farm trade (PPML gravity model). The coefficients are associations, not causal effects; say so when you discuss them.

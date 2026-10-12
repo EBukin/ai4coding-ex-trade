@@ -1,25 +1,25 @@
-Gravity model of farm trade, 27 countries, 2000-2019
+Gravity model of farm trade, 46 countries, 2000-2019
 
                     model
                      PPML
 Dependent Var.: trade_usd
                          
-log(dist_km)    -0.568***
-                (0.059)  
-contig           0.747***
-                (0.143)  
-comlang         -0.110   
-                (0.125)  
-rta              0.618***
-                (0.106)  
+log(dist_km)    -0.628***
+                (0.048)  
+contig           0.728***
+                (0.110)  
+comlang         -0.058   
+                (0.113)  
+rta              0.597***
+                (0.089)  
 Fixed-Effects:  ---------
 exporter-year         Yes
 importer-year         Yes
 _______________ _________
 S.E.: Clustered  by: pair
-Observations       14,040
-Squared Cor.      0.83942
-Pseudo R2         0.88724
-BIC              3.42e+12
+Observations       41,400
+Squared Cor.      0.83460
+Pseudo R2         0.90359
+BIC              4.97e+12
 ---
 Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
