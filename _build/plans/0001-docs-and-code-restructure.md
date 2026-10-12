@@ -1,6 +1,14 @@
 # Plan 0001: clear docs, data prep in the project, code by language, licence
 
-Date: 2026-10-12. Branch: `dev`. Status: approved, not started.
+Date: 2026-10-12. Branch: `dev`. Status: done, 2026-10-12. Not pushed.
+
+## Result
+
+- Rerun from the new paths: `data/clean/*.csv`, `outputs/data/*.csv`, `outputs/tables/*.csv` and `gravity.txt` are byte-identical; the Python and R figures too.
+- Stata: `sem_effects.csv` is byte-identical. The `.xlsx` changes on every run, and `sem_scatter.png` came out one pixel row shorter, with an alpha channel (the graph settings of the Stata session). Both were kept as committed.
+- `build_history.py`, run twice: 39 commits, 7 merges, 6 branches, the same `main` hash both times.
+- A fresh clone of `main` with `core.autocrlf=true`, after running the Python and R masters: `git status` is clean.
+- The contact email is still the placeholder.
 
 ## Goal
 
